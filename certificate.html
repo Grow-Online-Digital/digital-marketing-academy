@@ -24,10 +24,36 @@
 
   body {
     background: #ddd;
-    display: flex; flex-direction: column; align-items: center;
-    min-height: 100vh; padding: 40px 20px;
+    min-height: 100vh;
     font-family: var(--f-b);
+    margin: 0;
   }
+
+  .cert-page-content {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 40px 20px;
+  }
+
+  /* Site Nav */
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    background: var(--ink);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .site-nav-link {
+    padding: 10px 28px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+    transition: color 0.2s, background 0.2s;
+  }
+  .site-nav-link:hover { color: #fff; background: rgba(255,255,255,0.05); }
+  .site-nav-link.active { color: #c4963a; border-bottom: 2px solid #c4963a; }
 
   /* Controls */
   .controls {
@@ -206,6 +232,7 @@
   @media print {
     body { background: none; padding: 0; }
     .controls { display: none; }
+    .site-nav { display: none; }
     .cert-wrap { box-shadow: none; }
     @page { size: A4 landscape; margin: 0; }
   }
@@ -213,6 +240,15 @@
 </head>
 <body>
 
+<!-- SITE NAV -->
+<nav class="site-nav">
+  <a href="index.html" class="site-nav-link">Home</a>
+  <a href="tools.html" class="site-nav-link">Tools</a>
+  <a href="student-app.html" class="site-nav-link">Student Hub</a>
+  <a href="certificate.html" class="site-nav-link active">Certificate</a>
+</nav>
+
+<div class="cert-page-content">
 <div class="controls">
   <label>Student Name:</label>
   <input type="text" id="nameInput" placeholder="Enter student's full name…" value="Alex Johnson">
@@ -370,6 +406,8 @@
 
   </div>
 </div>
+
+</div><!-- end cert-page-content -->
 
 <script>
 const nameInput = document.getElementById('nameInput');

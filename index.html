@@ -32,6 +32,30 @@
     overflow-x: hidden;
   }
 
+  /* ─── SITE NAV ─── */
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    background: var(--ink);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .site-nav-link {
+    padding: 10px 28px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+    transition: color 0.2s, background 0.2s;
+  }
+  .site-nav-link:hover { color: #fff; background: rgba(255,255,255,0.05); }
+  .site-nav-link.active { color: var(--gold); border-bottom: 2px solid var(--gold); }
+
   /* ─── MASTHEAD ─── */
   .masthead {
     border-bottom: 1px solid var(--rule);
@@ -40,9 +64,9 @@
     align-items: center;
     justify-content: space-between;
     position: sticky;
-    top: 0;
+    top: 38px;
     background: var(--cream);
-    z-index: 100;
+    z-index: 99;
   }
   .masthead-logo {
     font-family: 'Playfair Display', serif;
@@ -560,9 +584,17 @@
 </head>
 <body>
 
+<!-- SITE NAV -->
+<nav class="site-nav">
+  <a href="index.html" class="site-nav-link active">Home</a>
+  <a href="tools.html" class="site-nav-link">Tools</a>
+  <a href="student-app.html" class="site-nav-link">Student Hub</a>
+  <a href="certificate.html" class="site-nav-link">Certificate</a>
+</nav>
+
 <!-- MASTHEAD -->
 <header class="masthead">
-  <a href="#" class="masthead-logo">Grow Online Digital<span>.</span></a>
+  <a href="index.html" class="masthead-logo">Grow Online Digital<span>.</span></a>
   <nav>
     <ul class="masthead-nav">
       <li><a href="#modules">Curriculum</a></li>

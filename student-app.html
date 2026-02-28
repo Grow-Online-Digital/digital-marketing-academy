@@ -9,9 +9,40 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
+<!-- SITE NAV -->
+<style>
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    background: #0f0e0d;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin: 0;
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+  .site-nav-link {
+    padding: 10px 28px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+    transition: color 0.2s, background 0.2s;
+  }
+  .site-nav-link:hover { color: #fff; background: rgba(255,255,255,0.05); }
+  .site-nav-link.active { color: #c4963a; border-bottom: 2px solid #c4963a; }
+</style>
+<nav class="site-nav">
+  <a href="index.html" class="site-nav-link">Home</a>
+  <a href="tools.html" class="site-nav-link">Tools</a>
+  <a href="student-app.html" class="site-nav-link active">Student Hub</a>
+  <a href="certificate.html" class="site-nav-link">Certificate</a>
+</nav>
+
   <div id="root"></div>
   <script type="text/babel">
-const { useState } = React;
+const { useState, useEffect } = React;
 
 const MODULES = [
   { id: 1, num: "M01", emoji: "🧭", name: "Foundations & AI",          weeks: "1–2",   cert: "Google Digital Garage", hours: 10, tasks: ["Digital Marketing Overview","Brand Observation","AI Tools Exercise","Buyer Persona"] },
@@ -30,15 +61,47 @@ const MODULES = [
 const TOTAL_HOURS = MODULES.reduce((s, m) => s + m.hours, 0);
 const TOTAL_TASKS = MODULES.reduce((s, m) => s + m.tasks.length, 0);
 
+const STORAGE_KEY = 'dma-student-hub';
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    return {
+      completedModules: new Set(data.completedModules || []),
+      completedTasks: new Set(data.completedTasks || []),
+      completedCerts: new Set(data.completedCerts || []),
+      notes: data.notes || {},
+      confidence: data.confidence || {},
+    };
+  } catch { return null; }
+}
+
+function saveState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    completedModules: [...state.completedModules],
+    completedTasks: [...state.completedTasks],
+    completedCerts: [...state.completedCerts],
+    notes: state.notes,
+    confidence: state.confidence,
+  }));
+}
+
 function Dashboard() {
-  const [completedModules, setCompletedModules] = useState(new Set());
-  const [completedTasks,   setCompletedTasks]   = useState(new Set());
-  const [completedCerts,   setCompletedCerts]   = useState(new Set());
+  const saved = loadState();
+  const [completedModules, setCompletedModules] = useState(saved?.completedModules || new Set());
+  const [completedTasks,   setCompletedTasks]   = useState(saved?.completedTasks || new Set());
+  const [completedCerts,   setCompletedCerts]   = useState(saved?.completedCerts || new Set());
   const [activeModule,     setActiveModule]     = useState(null);
   const [tab,              setTab]              = useState("progress");
 
-  const [notes, setNotes] = useState({});
-  const [confidence, setConfidence] = useState({});
+  const [notes, setNotes] = useState(saved?.notes || {});
+  const [confidence, setConfidence] = useState(saved?.confidence || {});
+
+  useEffect(() => {
+    saveState({ completedModules, completedTasks, completedCerts, notes, confidence });
+  }, [completedModules, completedTasks, completedCerts, notes, confidence]);
 
   const doneModules = completedModules.size;
   const doneTasks   = completedTasks.size;
@@ -247,7 +310,7 @@ function Dashboard() {
     <div style={styles.root}>
       {/* HEADER */}
       <header style={styles.header}>
-        <span style={styles.logo}>Grow Online Digital<span style={styles.logoSpan}>.</span> Student Portal</span>
+        <span style={styles.logo}>Grow Online Digital<span style={styles.logoSpan}>.</span> Student Hub</span>
         <div style={styles.headerRight}>
           {["progress","certs","notes"].map(t => (
             <button key={t} style={styles.tabBtn(tab === t)} onClick={() => setTab(t)}>
