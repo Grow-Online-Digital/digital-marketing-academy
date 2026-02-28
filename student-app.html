@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Student Dashboard — Grow Online Digital</title>
+  <title>Student Hub — Grow Online Digital</title>
+  <meta name="description" content="Track your Digital Marketing Academy progress, certifications, and notes. 11 modules, 8+ certifications.">
+  <meta property="og:title" content="Student Hub — Grow Online Digital Marketing Academy">
+  <meta property="og:description" content="Track your progress through the 30-week Digital Marketing Academy. Modules, tasks, certifications.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://Grow-Online-Digital.github.io/digital-marketing-academy/student-app.html">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -32,13 +38,53 @@
   }
   .site-nav-link:hover { color: #fff; background: rgba(255,255,255,0.05); }
   .site-nav-link.active { color: #c4963a; border-bottom: 2px solid #c4963a; }
+  .site-nav-link.cta-link { color: #d95f3b; font-weight: 600; }
+  .site-nav-link.cta-link:hover { color: #fff; background: #d95f3b; }
+  @media (max-width: 768px) {
+    .site-nav { flex-wrap: wrap; }
+    .site-nav-link { padding: 8px 14px; font-size: 11px; }
+  }
+  .storage-banner {
+    background: #ede9df;
+    border-bottom: 1px solid rgba(26,24,20,0.1);
+    padding: 10px 32px;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 12px;
+    color: #4a4640;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .storage-banner a {
+    color: #d95f3b;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .storage-banner a:hover { text-decoration: underline; }
+  .banner-close {
+    background: none;
+    border: none;
+    color: #8a8479;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 12px;
+    padding: 0 4px;
+  }
 </style>
 <nav class="site-nav">
   <a href="index.html" class="site-nav-link">Home</a>
   <a href="tools.html" class="site-nav-link">Tools</a>
   <a href="student-app.html" class="site-nav-link active">Student Hub</a>
   <a href="certificate.html" class="site-nav-link">Certificate</a>
+  <a href="https://classroom.google.com/c/ODQ2OTY5NjMxMjAy" class="site-nav-link cta-link" target="_blank">Classroom</a>
 </nav>
+
+<div class="storage-banner" id="storageBanner">
+  Your progress is saved in this browser only. For official tracking, use <a href="https://classroom.google.com/c/ODQ2OTY5NjMxMjAy" target="_blank">Google Classroom</a>
+  <button class="banner-close" onclick="document.getElementById('storageBanner').style.display='none';sessionStorage.setItem('banner-dismissed','1')">x</button>
+</div>
+<script>if(sessionStorage.getItem('banner-dismissed')){document.getElementById('storageBanner').style.display='none';}</script>
 
   <div id="root"></div>
   <script type="text/babel">
@@ -492,5 +538,20 @@ function Dashboard() {
 
 ReactDOM.createRoot(document.getElementById('root')).render(<Dashboard />);
   </script>
+
+<footer style="border-top:1px solid rgba(26,24,20,0.1);padding:40px 32px;display:flex;justify-content:space-between;align-items:center;font-family:'DM Sans',system-ui,sans-serif;background:#f5f2ea;">
+  <div style="font-family:Georgia,serif;font-size:18px;font-weight:700;">Grow Online Digital<span style="color:#d95f3b;">.</span>
+    <div style="display:flex;gap:16px;align-items:center;margin-top:8px;">
+      <a href="https://classroom.google.com/c/ODQ2OTY5NjMxMjAy" target="_blank" style="font-size:13px;font-weight:500;color:#d95f3b;text-decoration:none;font-family:'DM Sans',system-ui,sans-serif;">Google Classroom</a>
+      <span style="color:#8a8479;font-size:11px;">|</span>
+      <a href="https://chat.whatsapp.com/CZ57eCVaSPlAXl2CDqRnUs?mode=gi_t" target="_blank" style="font-size:13px;font-weight:500;color:#d95f3b;text-decoration:none;font-family:'DM Sans',system-ui,sans-serif;">WhatsApp Community</a>
+    </div>
+  </div>
+  <div style="text-align:center;font-size:13px;color:#8a8479;">
+    Designed & delivered by <strong style="color:#1a1814;">PKB</strong><br>
+    Digital Marketing Trainer
+  </div>
+  <div style="font-family:monospace;font-size:12px;color:#8a8479;letter-spacing:0.06em;">2025–2026 Edition</div>
+</footer>
 </body>
 </html>
