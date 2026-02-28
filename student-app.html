@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Dashboard — Grow Online Digital</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+const { useState } = React;
+
+const MODULES = [
+  { id: 1, num: "M01", emoji: "🧭", name: "Foundations & AI",          weeks: "1–2",   cert: "Google Digital Garage", hours: 10, tasks: ["Digital Marketing Overview","Brand Observation","AI Tools Exercise","Buyer Persona"] },
+  { id: 2, num: "M02", emoji: "🖥️", name: "Website & UX",             weeks: "3–4",   cert: null,                    hours: 7,  tasks: ["Website Audit","Landing Page Wireframe"] },
+  { id: 3, num: "M03", emoji: "🔍", name: "SEO & AI Search",           weeks: "5–8",   cert: "Semrush SEO",           hours: 13, tasks: ["Keyword Research","On-Page Audit","GEO Strategy"] },
+  { id: 4, num: "M04", emoji: "🎯", name: "Google Ads & PPC",          weeks: "9–11",  cert: "Google Ads Search",     hours: 13, tasks: ["Campaign Plan","Ad Copy (3 RSAs)","AI Max vs PMax"] },
+  { id: 5, num: "M05", emoji: "📱", name: "Paid Social",               weeks: "12–14", cert: "Meta / HubSpot",        hours: 11, tasks: ["Meta Campaign Plan","Ad Creative x3","Retargeting Strategy"] },
+  { id: 6, num: "M06", emoji: "🎬", name: "Organic Social & Video",    weeks: "15–16", cert: null,                    hours: 9,  tasks: ["Social Media Strategy","Short-Form Video Scripts x3"] },
+  { id: 7, num: "M07", emoji: "✉️", name: "Email Marketing",           weeks: "17–18", cert: "HubSpot Email",         hours: 9,  tasks: ["Email Marketing Plan","Welcome Sequence x5","Automation Workflows x2"] },
+  { id: 8, num: "M08", emoji: "✍️", name: "Content Marketing",         weeks: "19–20", cert: "HubSpot Content",       hours: 9,  tasks: ["Content Strategy","Blog Posts x2","Content Repurposing Plan"] },
+  { id: 9, num: "M09", emoji: "📊", name: "Analytics & Privacy",       weeks: "21–23", cert: "Google Analytics",      hours: 13, tasks: ["GA4 Report","Looker Studio Dashboard","GDPR Checklist"] },
+  { id:10, num: "M10", emoji: "🗺️", name: "Strategy & Career",         weeks: "24–25", cert: "HubSpot Inbound",       hours: 9,  tasks: ["Integrated Strategy","CV & LinkedIn"] },
+  { id:11, num: "M11", emoji: "🚀", name: "Capstone Project",          weeks: "26–30", cert: "Completion Certificate", hours: 35, tasks: ["Business Brief","Full Strategy","Campaign Assets","KPI Dashboard","Pitch Deck"] },
+];
+
+const TOTAL_HOURS = MODULES.reduce((s, m) => s + m.hours, 0);
+const TOTAL_TASKS = MODULES.reduce((s, m) => s + m.tasks.length, 0);
+
+function Dashboard() {
+  const [completedModules, setCompletedModules] = useState(new Set());
+  const [completedTasks,   setCompletedTasks]   = useState(new Set());
+  const [completedCerts,   setCompletedCerts]   = useState(new Set());
+  const [activeModule,     setActiveModule]     = useState(null);
+  const [tab,              setTab]              = useState("progress");
+
+  const [notes, setNotes] = useState({});
+  const [confidence, setConfidence] = useState({});
+
+  const doneModules = completedModules.size;
+  const doneTasks   = completedTasks.size;
+  const doneCerts   = completedCerts.size;
+  const doneHours   = MODULES.filter(m => completedModules.has(m.id)).reduce((s, m) => s + m.hours, 0);
+
+  const progressPct = Math.round((doneModules / MODULES.length) * 100);
+
+  function toggleTask(key) {
+    setCompletedTasks(prev => {
+      const next = new Set(prev);
+      next.has(key) ? next.delete(key) : next.add(key);
+      return next;
+    });
+  }
+
+  function toggleCert(id) {
+    setCompletedCerts(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
+
+  function toggleModule(id) {
+    setCompletedModules(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
+
+  const activeM = MODULES.find(m => m.id === activeModule);
+
+  const styles = {
+    root: {
+      fontFamily: "'DM Sans', system-ui, sans-serif",
+      background: "#f5f2ea",
+      minHeight: "100vh",
+      color: "#1a1814",
+    },
+    header: {
+      background: "#1a1814",
+      color: "#fff",
+      padding: "0 32px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      height: 60,
+      position: "sticky",
+      top: 0,
+      zIndex: 50,
+    },
+    logo: { fontFamily: "Georgia, serif", fontSize: 16, fontWeight: 700, letterSpacing: "0.02em" },
+    logoSpan: { color: "#d95f3b" },
+    headerRight: { display: "flex", gap: 8 },
+    tabBtn: (active) => ({
+      padding: "6px 18px",
+      border: "1px solid",
+      borderColor: active ? "#c4963a" : "rgba(255,255,255,0.18)",
+      background: active ? "#c4963a" : "transparent",
+      color: active ? "#1a1814" : "rgba(255,255,255,0.7)",
+      borderRadius: 3,
+      fontSize: 13,
+      fontWeight: 600,
+      cursor: "pointer",
+      letterSpacing: "0.04em",
+      transition: "all 0.15s",
+    }),
+    statsBar: {
+      display: "grid",
+      gridTemplateColumns: "repeat(4, 1fr)",
+      borderBottom: "1px solid rgba(26,24,20,0.1)",
+    },
+    statCell: {
+      padding: "24px 32px",
+      borderRight: "1px solid rgba(26,24,20,0.1)",
+    },
+    statNum: { fontSize: 32, fontFamily: "Georgia, serif", fontWeight: 700, lineHeight: 1, marginBottom: 4 },
+    statLabel: { fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#8a8479" },
+    progressWrap: { padding: "24px 32px", borderBottom: "1px solid rgba(26,24,20,0.1)", background: "#ede9df" },
+    progressLabel: { fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "#8a8479", marginBottom: 10, display: "flex", justifyContent: "space-between" },
+    progressTrack: { height: 6, background: "rgba(26,24,20,0.12)", borderRadius: 3, overflow: "hidden" },
+    progressFill: { height: "100%", background: "linear-gradient(90deg, #d95f3b, #c4963a)", borderRadius: 3, transition: "width 0.5s ease" },
+    grid: { display: "grid", gridTemplateColumns: "300px 1fr" },
+    moduleList: { borderRight: "1px solid rgba(26,24,20,0.1)", overflow: "auto", maxHeight: "calc(100vh - 160px)", position: "sticky", top: 60 },
+    moduleItem: (active, done) => ({
+      padding: "16px 24px",
+      borderBottom: "1px solid rgba(26,24,20,0.07)",
+      cursor: "pointer",
+      background: active ? "#fff" : done ? "rgba(42,125,111,0.04)" : "transparent",
+      borderLeft: `3px solid ${active ? "#d95f3b" : done ? "#2a7d6f" : "transparent"}`,
+      transition: "background 0.15s",
+      display: "flex",
+      alignItems: "center",
+      gap: 12,
+    }),
+    moduleEmoji: { fontSize: 18, flexShrink: 0 },
+    moduleInfo: { flex: 1, minWidth: 0 },
+    moduleName: (done) => ({ fontSize: 13, fontWeight: 600, marginBottom: 2, color: done ? "#2a7d6f" : "#1a1814", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }),
+    moduleWeek: { fontSize: 11, color: "#8a8479", fontFamily: "monospace" },
+    moduleCheck: (done) => ({
+      width: 18, height: 18, borderRadius: "50%",
+      border: `2px solid ${done ? "#2a7d6f" : "rgba(26,24,20,0.2)"}`,
+      background: done ? "#2a7d6f" : "transparent",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      flexShrink: 0, fontSize: 10, color: "#fff",
+    }),
+    detail: { padding: 40, overflow: "auto", maxHeight: "calc(100vh - 160px)" },
+    detailEmpty: { display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: 400, color: "#8a8479", textAlign: "center", gap: 12 },
+    detailEmoji: { fontSize: 48 },
+    detailHint: { fontSize: 14, lineHeight: 1.6 },
+    detailHeader: { marginBottom: 32 },
+    detailNum: { fontSize: 11, fontFamily: "monospace", color: "#8a8479", letterSpacing: "0.1em", marginBottom: 8 },
+    detailTitle: { fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 700, marginBottom: 8, lineHeight: 1.2 },
+    detailMeta: { display: "flex", gap: 16, flexWrap: "wrap", marginTop: 12 },
+    chip: (color) => ({
+      fontSize: 11, fontWeight: 600, letterSpacing: "0.06em",
+      textTransform: "uppercase",
+      padding: "3px 10px",
+      border: `1px solid ${color}`,
+      color, borderRadius: 2,
+    }),
+    sectionTitle: { fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#8a8479", marginBottom: 16, marginTop: 32 },
+    taskItem: { display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 0", borderBottom: "1px solid rgba(26,24,20,0.07)" },
+    taskCheck: (done) => ({
+      width: 20, height: 20, border: `1.5px solid ${done ? "#2a7d6f" : "rgba(26,24,20,0.25)"}`,
+      background: done ? "#2a7d6f" : "transparent",
+      borderRadius: 3, cursor: "pointer",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      fontSize: 11, color: "#fff", fontWeight: 700, flexShrink: 0,
+      transition: "all 0.15s", marginTop: 1,
+    }),
+    taskLabel: (done) => ({
+      fontSize: 14, lineHeight: 1.5,
+      textDecoration: done ? "line-through" : "none",
+      color: done ? "#8a8479" : "#1a1814",
+    }),
+    certRow: { display: "flex", alignItems: "center", gap: 14, padding: "16px 0", borderBottom: "1px solid rgba(26,24,20,0.07)" },
+    certCheck: (done) => ({
+      width: 22, height: 22, border: `1.5px solid ${done ? "#c4963a" : "rgba(26,24,20,0.2)"}`,
+      background: done ? "#c4963a" : "transparent",
+      borderRadius: 3, cursor: "pointer",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      fontSize: 11, color: done ? "#1a1814" : "transparent", fontWeight: 700, flexShrink: 0,
+    }),
+    certName: { fontSize: 14, fontWeight: 500 },
+    markDone: {
+      marginTop: 28,
+      padding: "12px 24px",
+      background: "#1a1814",
+      color: "#fff",
+      border: "none",
+      fontSize: 13,
+      fontWeight: 600,
+      letterSpacing: "0.04em",
+      cursor: "pointer",
+      borderRadius: 3,
+      transition: "background 0.15s",
+    },
+    notesArea: { padding: 40 },
+    noteCard: { background: "#fff", border: "1px solid rgba(26,24,20,0.1)", padding: 20, marginBottom: 12, borderRadius: 4 },
+    noteCardModule: { fontSize: 11, color: "#8a8479", fontFamily: "monospace", marginBottom: 4 },
+    noteCardText: { fontSize: 14, lineHeight: 1.65, color: "#1a1814" },
+    certsArea: { padding: 40 },
+    certCard: (done) => ({
+      background: done ? "rgba(196,150,58,0.08)" : "#fff",
+      border: `1px solid ${done ? "rgba(196,150,58,0.3)" : "rgba(26,24,20,0.1)"}`,
+      padding: "20px 24px",
+      borderRadius: 4,
+      marginBottom: 8,
+      display: "flex",
+      alignItems: "center",
+      gap: 20,
+    }),
+    certCardNum: { fontFamily: "monospace", fontSize: 11, color: "#8a8479", width: 40, flexShrink: 0 },
+    certCardName: { flex: 1, fontSize: 14, fontWeight: 600 },
+    certCardProvider: { fontSize: 12, color: "#8a8479", marginTop: 2 },
+    certBadge: (done) => ({
+      fontSize: 11, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase",
+      padding: "4px 12px", borderRadius: 2,
+      background: done ? "#c4963a" : "rgba(26,24,20,0.07)",
+      color: done ? "#1a1814" : "#8a8479",
+    }),
+    certToggleBtn: (done) => ({
+      width: 24, height: 24,
+      border: `1.5px solid ${done ? "#c4963a" : "rgba(26,24,20,0.25)"}`,
+      background: done ? "#c4963a" : "transparent",
+      borderRadius: 3, cursor: "pointer",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      fontSize: 12, color: done ? "#1a1814" : "transparent",
+      fontWeight: 900, flexShrink: 0,
+    }),
+    confRow: { display: "flex", gap: 6, marginTop: 16 },
+    confBtn: (active) => ({
+      width: 32, height: 32, border: `1.5px solid ${active ? "#d95f3b" : "rgba(26,24,20,0.15)"}`,
+      background: active ? "#d95f3b" : "transparent",
+      color: active ? "#fff" : "#8a8479",
+      borderRadius: 3, cursor: "pointer", fontSize: 12, fontWeight: 700,
+    }),
+  };
+
+  const certModules = MODULES.filter(m => m.cert);
+
+  return (
+    <div style={styles.root}>
+      {/* HEADER */}
+      <header style={styles.header}>
+        <span style={styles.logo}>Grow Online Digital<span style={styles.logoSpan}>.</span> Student Portal</span>
+        <div style={styles.headerRight}>
+          {["progress","certs","notes"].map(t => (
+            <button key={t} style={styles.tabBtn(tab === t)} onClick={() => setTab(t)}>
+              {t === "progress" ? "📋 Progress" : t === "certs" ? "🏆 Certs" : "📝 Notes"}
+            </button>
+          ))}
+        </div>
+      </header>
+
+      {/* STATS */}
+      <div style={styles.statsBar}>
+        {[
+          { num: `${doneModules}/${MODULES.length}`, label: "Modules Complete" },
+          { num: `${doneTasks}/${TOTAL_TASKS}`, label: "Tasks Done" },
+          { num: `${doneCerts}/${certModules.length}`, label: "Certifications" },
+          { num: `${doneHours}h`, label: "Hours Completed" },
+        ].map((s, i) => (
+          <div key={i} style={{...styles.statCell, ...(i === 3 ? { borderRight: "none" } : {})}}>
+            <div style={styles.statNum}>{s.num}</div>
+            <div style={styles.statLabel}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* PROGRESS BAR */}
+      <div style={styles.progressWrap}>
+        <div style={styles.progressLabel}>
+          <span>Overall Progress</span>
+          <span>{progressPct}%</span>
+        </div>
+        <div style={styles.progressTrack}>
+          <div style={{...styles.progressFill, width: `${progressPct}%`}} />
+        </div>
+      </div>
+
+      {/* MAIN CONTENT */}
+      {tab === "progress" && (
+        <div style={styles.grid}>
+          <div style={styles.moduleList}>
+            {MODULES.map(m => {
+              const done = completedModules.has(m.id);
+              const active = activeModule === m.id;
+              return (
+                <div key={m.id} style={styles.moduleItem(active, done)} onClick={() => setActiveModule(m.id)}>
+                  <span style={styles.moduleEmoji}>{m.emoji}</span>
+                  <div style={styles.moduleInfo}>
+                    <div style={styles.moduleName(done)}>{m.name}</div>
+                    <div style={styles.moduleWeek}>Weeks {m.weeks} · {m.hours}h</div>
+                  </div>
+                  <div style={styles.moduleCheck(done)}>{done ? "✓" : ""}</div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div style={styles.detail}>
+            {!activeM ? (
+              <div style={styles.detailEmpty}>
+                <div style={styles.detailEmoji}>👈</div>
+                <div style={styles.detailHint}>Select a module from the list<br />to view tasks and track your progress.</div>
+              </div>
+            ) : (
+              <>
+                <div style={styles.detailHeader}>
+                  <div style={styles.detailNum}>{activeM.num}</div>
+                  <div style={styles.detailTitle}>{activeM.emoji} {activeM.name}</div>
+                  <div style={styles.detailMeta}>
+                    <span style={styles.chip("#4a4640")}>📅 Weeks {activeM.weeks}</span>
+                    <span style={styles.chip("#2a7d6f")}>{activeM.hours} hours</span>
+                    {activeM.cert && <span style={styles.chip("#c4963a")}>🏆 {activeM.cert}</span>}
+                  </div>
+                </div>
+
+                <div style={styles.sectionTitle}>Assignment Tasks</div>
+                {activeM.tasks.map((task, i) => {
+                  const key = `${activeM.id}-${i}`;
+                  const done = completedTasks.has(key);
+                  return (
+                    <div key={i} style={styles.taskItem}>
+                      <div style={styles.taskCheck(done)} onClick={() => toggleTask(key)}>{done ? "✓" : ""}</div>
+                      <span style={styles.taskLabel(done)}>{task}</span>
+                    </div>
+                  );
+                })}
+
+                {activeM.cert && (
+                  <>
+                    <div style={styles.sectionTitle}>Certification</div>
+                    <div style={styles.certRow}>
+                      <div style={styles.certCheck(completedCerts.has(activeM.id))} onClick={() => toggleCert(activeM.id)}>
+                        {completedCerts.has(activeM.id) ? "✓" : ""}
+                      </div>
+                      <span style={styles.certName}>{activeM.cert}</span>
+                    </div>
+                  </>
+                )}
+
+                <div style={styles.sectionTitle}>Confidence Level</div>
+                <div style={styles.confRow}>
+                  {[1,2,3,4,5,6,7,8,9,10].map(n => (
+                    <button key={n}
+                      style={styles.confBtn(confidence[activeM.id] === n)}
+                      onClick={() => setConfidence(p => ({...p, [activeM.id]: n}))}>
+                      {n}
+                    </button>
+                  ))}
+                </div>
+
+                <div style={styles.sectionTitle}>Notes for this module</div>
+                <textarea
+                  style={{ width: "100%", minHeight: 80, padding: 12, fontSize: 13, border: "1px solid rgba(26,24,20,0.15)", borderRadius: 4, background: "#fff", fontFamily: "inherit", lineHeight: 1.6, resize: "vertical" }}
+                  placeholder="Add notes, key takeaways, questions for your trainer..."
+                  value={notes[activeM.id] || ""}
+                  onChange={e => setNotes(p => ({...p, [activeM.id]: e.target.value}))}
+                />
+
+                <button
+                  style={{...styles.markDone, background: completedModules.has(activeM.id) ? "#2a7d6f" : "#1a1814"}}
+                  onClick={() => toggleModule(activeM.id)}
+                >
+                  {completedModules.has(activeM.id) ? "✓ Module Complete — Click to Undo" : "Mark Module as Complete →"}
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* CERTS TAB */}
+      {tab === "certs" && (
+        <div style={styles.certsArea}>
+          <h2 style={{fontFamily:"Georgia,serif", fontSize:22, marginBottom:8}}>🏆 Certification Tracker</h2>
+          <p style={{fontSize:13, color:"#8a8479", marginBottom:32}}>Mark certifications as earned — they'll appear on your summary. Don't forget to add them to LinkedIn!</p>
+          {certModules.map((m, i) => {
+            const done = completedCerts.has(m.id);
+            return (
+              <div key={m.id} style={styles.certCard(done)}>
+                <div style={styles.certCardNum}>{String(i+1).padStart(2,"0")}</div>
+                <div style={{flex:1}}>
+                  <div style={styles.certCardName}>{m.cert}</div>
+                  <div style={styles.certCardProvider}>via {m.num}: {m.name}</div>
+                </div>
+                <span style={styles.certBadge(done)}>{done ? "Earned" : "Pending"}</span>
+                <div style={styles.certToggleBtn(done)} onClick={() => toggleCert(m.id)}>{done ? "✓" : ""}</div>
+              </div>
+            );
+          })}
+          <div style={{marginTop:32, padding:"24px 28px", background:"#1a1814", borderRadius:4, color:"rgba(255,255,255,0.8)", fontSize:13, lineHeight:1.7}}>
+            <strong style={{color:"#c4963a", display:"block", marginBottom:6}}>💡 Pro tip</strong>
+            Add every certification to your LinkedIn profile as soon as you earn it.
+            72% of hiring managers now consider digital certificates valuable when evaluating candidates.
+          </div>
+        </div>
+      )}
+
+      {/* NOTES TAB */}
+      {tab === "notes" && (
+        <div style={styles.notesArea}>
+          <h2 style={{fontFamily:"Georgia,serif", fontSize:22, marginBottom:8}}>📝 My Study Notes</h2>
+          <p style={{fontSize:13, color:"#8a8479", marginBottom:32}}>Notes you've added across all modules appear here for quick review.</p>
+          {MODULES.filter(m => notes[m.id]?.trim()).length === 0 ? (
+            <div style={{...styles.detailEmpty, height:300}}>
+              <div style={{fontSize:40}}>🗒️</div>
+              <div style={styles.detailHint}>Your notes will appear here.<br/>Add them via the Progress tab → select a module.</div>
+            </div>
+          ) : (
+            MODULES.filter(m => notes[m.id]?.trim()).map(m => (
+              <div key={m.id} style={styles.noteCard}>
+                <div style={styles.noteCardModule}>{m.num} · {m.name}</div>
+                <div style={styles.noteCardText}>{notes[m.id]}</div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Dashboard />);
+  </script>
+</body>
+</html>
