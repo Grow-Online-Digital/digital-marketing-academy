@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Study Planner — Grow Online Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #111827;
+    --ink-2: #374151;
+    --ink-3: #6B7280;
+    --border: #E5E7EB;
+    --border-2: #D1D5DB;
+    --bg: #F9FAFB;
+    --white: #FFFFFF;
+    --accent: #d4541a;
+    --accent-light: #fff3ee;
+    --gold: #c49a2a;
+    --gold-light: #fdf8ec;
+    --green: #059669;
+    --green-light: #ecfdf5;
+    --red: #DC2626;
+    --red-light: #FEF2F2;
+    --blue: #2563EB;
+    --blue-light: #EFF6FF;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--accent); }
+  .header-nav { display: flex; align-items: center; gap: 16px; }
+  .week-nav {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .week-nav button {
+    width: 36px; height: 36px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--white);
+    cursor: pointer; font-size: 18px; color: var(--ink-2);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .week-nav button:hover { background: var(--bg); border-color: var(--border-2); }
+  .week-label {
+    font-size: 14px; font-weight: 600; color: var(--ink);
+    min-width: 90px; text-align: center;
+  }
+  .today-btn {
+    padding: 8px 16px; border-radius: 6px;
+    border: 1px solid var(--border); background: var(--white);
+    font-size: 14px; font-weight: 500; color: var(--ink-2);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .today-btn:hover { background: var(--bg); }
+
+  /* LAYOUT */
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px;
+  }
+
+  /* WEEK SUMMARY BAR */
+  .week-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .summary-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .summary-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .summary-icon.orange { background: var(--accent-light); }
+  .summary-icon.gold { background: var(--gold-light); }
+  .summary-icon.green { background: var(--green-light); }
+  .summary-icon.blue { background: var(--blue-light); }
+  .summary-data { flex: 1; min-width: 0; }
+  .summary-val {
+    font-family: 'Fraunces', serif;
+    font-size: 28px; font-weight: 700; color: var(--ink);
+    line-height: 1;
+  }
+  .summary-val span { font-size: 16px; color: var(--ink-3); font-family: 'DM Sans', sans-serif; font-weight: 400; }
+  .summary-label { font-size: 13px; color: var(--ink-3); margin-top: 4px; }
+
+  /* PROGRESS BAR */
+  .progress-bar-wrap {
+    background: var(--border);
+    border-radius: 99px;
+    height: 6px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: var(--accent);
+    transition: width 0.4s ease;
+  }
+
+  /* PLANNER GRID */
+  .planner-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 12px;
+  }
+  .day-column {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 500px;
+    transition: border-color 0.15s;
+  }
+  .day-column:hover { border-color: var(--border-2); }
+  .day-column.today {
+    border-color: var(--accent);
+    border-width: 2px;
+  }
+  .day-header {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+  .day-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .day-number {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.1;
+    margin-top: 2px;
+  }
+  .day-column.today .day-name { color: var(--accent); }
+  .day-column.today .day-number {
+    color: var(--white);
+    background: var(--accent);
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    margin: 4px auto 0;
+  }
+  .day-hours {
+    font-size: 12px; color: var(--ink-3);
+    font-weight: 500; margin-top: 6px;
+  }
+
+  .day-body {
+    flex: 1;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* TASK ITEMS */
+  .task-item {
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    cursor: grab;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .task-item:hover { border-color: var(--border-2); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .task-item.done { opacity: 0.55; }
+  .task-item.done .task-text { text-decoration: line-through; color: var(--ink-3); }
+  .task-top { display: flex; align-items: flex-start; gap: 8px; }
+  .task-check {
+    width: 18px; height: 18px; border-radius: 4px;
+    border: 2px solid var(--border-2); background: var(--white);
+    cursor: pointer; flex-shrink: 0; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .task-check.checked {
+    background: var(--green); border-color: var(--green);
+    color: white; font-size: 11px;
+  }
+  .task-text { font-size: 13px; font-weight: 500; flex: 1; line-height: 1.4; }
+  .task-meta {
+    display: flex; align-items: center; gap: 6px; margin-top: 6px; flex-wrap: wrap;
+  }
+  .task-tag {
+    font-size: 11px; font-weight: 600; padding: 2px 7px;
+    border-radius: 99px; letter-spacing: 0.02em;
+  }
+  .tag-study { background: var(--blue-light); color: var(--blue); }
+  .tag-cert { background: var(--gold-light); color: var(--gold); }
+  .tag-task { background: var(--accent-light); color: var(--accent); }
+  .tag-review { background: var(--green-light); color: var(--green); }
+  .task-time {
+    font-size: 11px; color: var(--ink-3);
+    display: flex; align-items: center; gap: 3px;
+  }
+  .task-del {
+    position: absolute; top: 6px; right: 6px;
+    width: 20px; height: 20px;
+    border: none; background: none; cursor: pointer;
+    font-size: 14px; color: var(--ink-3);
+    opacity: 0; transition: opacity 0.15s;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 4px;
+  }
+  .task-item:hover .task-del { opacity: 1; }
+  .task-del:hover { background: var(--red-light); color: var(--red); }
+
+  /* ADD TASK */
+  .add-task-btn {
+    border: 1px dashed var(--border-2);
+    background: transparent;
+    border-radius: 8px;
+    width: 100%;
+    padding: 8px;
+    font-size: 13px;
+    color: var(--ink-3);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+  }
+  .add-task-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-light);
+  }
+
+  /* QUICK ADD FORM */
+  .quick-add {
+    margin-top: 4px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .quick-add input, .quick-add select {
+    border: 1px solid var(--border-2); border-radius: 6px;
+    padding: 8px 10px; font-size: 13px; width: 100%;
+    font-family: 'DM Sans', sans-serif; color: var(--ink);
+    background: var(--white); transition: border-color 0.15s;
+  }
+  .quick-add input:focus, .quick-add select:focus {
+    outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(212,84,26,0.08);
+  }
+  .quick-add-actions { display: flex; gap: 6px; }
+  .qa-save, .qa-cancel {
+    flex: 1; padding: 7px; border-radius: 6px;
+    font-size: 12px; font-weight: 600; cursor: pointer; border: none;
+    transition: all 0.15s;
+  }
+  .qa-save { background: var(--accent); color: white; }
+  .qa-save:hover { background: #b84517; }
+  .qa-cancel { background: var(--bg); color: var(--ink-2); border: 1px solid var(--border); }
+  .qa-cancel:hover { background: var(--border); }
+
+  /* SIDEBAR PANEL */
+  .layout { display: grid; grid-template-columns: 1fr 280px; gap: 24px; }
+  .sidebar { display: flex; flex-direction: column; gap: 16px; }
+  .sidebar-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px;
+  }
+  .sidebar-title {
+    font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600;
+    margin-bottom: 16px; color: var(--ink);
+  }
+
+  /* MODULE BADGE LIST */
+  .module-list { display: flex; flex-direction: column; gap: 8px; }
+  .module-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 8px;
+    border: 1px solid var(--border); cursor: pointer;
+    transition: all 0.15s; font-size: 13px;
+  }
+  .module-row:hover { border-color: var(--accent); background: var(--accent-light); }
+  .module-num {
+    width: 24px; height: 24px; border-radius: 6px;
+    background: var(--accent); color: white;
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .module-title { flex: 1; font-weight: 500; }
+  .module-weeks { font-size: 11px; color: var(--ink-3); }
+
+  /* GOALS */
+  .goal-input-wrap { display: flex; flex-direction: column; gap: 8px; }
+  .goal-input {
+    border: 1px solid var(--border-2); border-radius: 8px;
+    padding: 10px 12px; font-size: 13px;
+    font-family: 'DM Sans', sans-serif; resize: vertical;
+    min-height: 80px; color: var(--ink);
+    transition: border-color 0.15s;
+  }
+  .goal-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(212,84,26,0.08); }
+  .goal-save {
+    padding: 9px; background: var(--ink); color: white;
+    border: none; border-radius: 6px; cursor: pointer;
+    font-size: 13px; font-weight: 600; transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .goal-save:hover { background: var(--accent); }
+  .goals-saved { display: flex; flex-direction: column; gap: 6px; }
+  .goal-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 8px 10px; background: var(--gold-light);
+    border-radius: 6px; font-size: 13px;
+  }
+  .goal-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; margin-top: 5px; }
+
+  /* QUICK TEMPLATES */
+  .templates { display: flex; flex-direction: column; gap: 6px; }
+  .template-btn {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 8px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--white);
+    text-align: left; font-size: 13px; font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s; color: var(--ink-2);
+  }
+  .template-btn:hover { border-color: var(--accent); background: var(--accent-light); color: var(--accent); }
+  .template-icon { font-size: 16px; }
+
+  /* HOURLY LOG */
+  .hour-log { display: flex; flex-direction: column; gap: 2px; }
+  .hour-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 4px 0;
+  }
+  .hour-label { font-size: 11px; color: var(--ink-3); width: 36px; flex-shrink: 0; }
+  .hour-bar-wrap { flex: 1; background: var(--border); border-radius: 99px; height: 8px; overflow: hidden; }
+  .hour-bar { height: 100%; background: var(--accent); border-radius: 99px; }
+  .hour-val { font-size: 11px; color: var(--ink-3); width: 24px; text-align: right; }
+
+  /* RESPONSIVE */
+  @media (max-width: 1100px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { display: grid; grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 900px) {
+    .planner-grid { grid-template-columns: repeat(4, 1fr); }
+    .week-summary { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .planner-grid { grid-template-columns: repeat(2, 1fr); }
+    .container { padding: 16px; }
+    .header { padding: 0 16px; }
+    .sidebar { grid-template-columns: 1fr; }
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .day-column { animation: fadeUp 0.4s ease both; }
+  .day-column:nth-child(1) { animation-delay: 0.04s; }
+  .day-column:nth-child(2) { animation-delay: 0.08s; }
+  .day-column:nth-child(3) { animation-delay: 0.12s; }
+  .day-column:nth-child(4) { animation-delay: 0.16s; }
+  .day-column:nth-child(5) { animation-delay: 0.20s; }
+  .day-column:nth-child(6) { animation-delay: 0.24s; }
+  .day-column:nth-child(7) { animation-delay: 0.28s; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">Grow Online Digital<span>.</span></div>
+  <div class="header-nav">
+    <div class="week-nav">
+      <button onclick="changeWeek(-1)" title="Previous week">‹</button>
+      <span class="week-label" id="weekLabel">Week 1</span>
+      <button onclick="changeWeek(1)" title="Next week">›</button>
+    </div>
+    <button class="today-btn" onclick="goToToday()">Today</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- WEEK SUMMARY -->
+  <div class="week-summary">
+    <div class="summary-card">
+      <div class="summary-icon orange">📚</div>
+      <div class="summary-data">
+        <div class="summary-val" id="hoursVal">0<span>h</span></div>
+        <div class="summary-label">Hours studied this week</div>
+        <div class="progress-bar-wrap" style="margin-top:6px">
+          <div class="progress-bar-fill" id="hoursBar" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-icon gold">✅</div>
+      <div class="summary-data">
+        <div class="summary-val" id="tasksVal">0<span>/0</span></div>
+        <div class="summary-label">Tasks completed</div>
+        <div class="progress-bar-wrap" style="margin-top:6px">
+          <div class="progress-bar-fill" id="tasksBar" style="width:0%; background: var(--gold)"></div>
+        </div>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-icon green">🎯</div>
+      <div class="summary-data">
+        <div class="summary-val" id="certVal">0<span></span></div>
+        <div class="summary-label">Certifications in progress</div>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-icon blue">📊</div>
+      <div class="summary-data">
+        <div class="summary-val" id="streakVal">0<span>d</span></div>
+        <div class="summary-label">Study streak</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout">
+
+    <!-- PLANNER MAIN -->
+    <div>
+      <div class="planner-grid" id="plannerGrid"></div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <!-- WEEKLY GOALS -->
+      <div class="sidebar-card">
+        <div class="sidebar-title">🎯 This Week's Goals</div>
+        <div class="goal-input-wrap">
+          <textarea class="goal-input" id="goalInput" placeholder="Add a learning goal for this week…"></textarea>
+          <button class="goal-save" onclick="addGoal()">Add Goal</button>
+        </div>
+        <div class="goals-saved" id="goalsList" style="margin-top:12px"></div>
+      </div>
+
+      <!-- QUICK TASK TEMPLATES -->
+      <div class="sidebar-card">
+        <div class="sidebar-title">⚡ Quick Add</div>
+        <div class="templates">
+          <button class="template-btn" onclick="addTemplate('Watch module videos', 'study', '1.5h')">
+            <span class="template-icon">🎬</span> Watch module videos
+          </button>
+          <button class="template-btn" onclick="addTemplate('Complete certification quiz', 'cert', '1h')">
+            <span class="template-icon">🏆</span> Certification quiz
+          </button>
+          <button class="template-btn" onclick="addTemplate('Work on assignment task', 'task', '2h')">
+            <span class="template-icon">📝</span> Assignment task
+          </button>
+          <button class="template-btn" onclick="addTemplate('Practice with tools', 'study', '1h')">
+            <span class="template-icon">🛠️</span> Practice with tools
+          </button>
+          <button class="template-btn" onclick="addTemplate('Review week\'s learning', 'review', '30m')">
+            <span class="template-icon">🔄</span> Weekly review
+          </button>
+          <button class="template-btn" onclick="addTemplate('Read industry blog post', 'study', '30m')">
+            <span class="template-icon">📰</span> Read industry blog
+          </button>
+          <button class="template-btn" onclick="addTemplate('AI prompt practice', 'study', '45m')">
+            <span class="template-icon">🤖</span> AI prompt practice
+          </button>
+          <button class="template-btn" onclick="addTemplate('Update LinkedIn profile', 'task', '1h')">
+            <span class="template-icon">💼</span> Update LinkedIn
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE REFERENCE -->
+      <div class="sidebar-card">
+        <div class="sidebar-title">📘 Course Modules</div>
+        <div class="module-list" id="moduleList"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── STATE ──────────────────────────────────────────────────────────────
+  const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const MODULES = [
+    { n:1, title:'Foundations & AI', weeks:'1–2' },
+    { n:2, title:'Website & UX', weeks:'3–4' },
+    { n:3, title:'SEO & AI Search', weeks:'5–8' },
+    { n:4, title:'Google Ads / PPC', weeks:'9–11' },
+    { n:5, title:'Paid Social', weeks:'12–14' },
+    { n:6, title:'Organic Social & Video', weeks:'15–16' },
+    { n:7, title:'Email Marketing', weeks:'17–18' },
+    { n:8, title:'Content Marketing', weeks:'19–20' },
+    { n:9, title:'Analytics & Privacy', weeks:'21–23' },
+    { n:10, title:'Strategy & Careers', weeks:'24–25' },
+    { n:11, title:'Capstone Project', weeks:'26–30' },
+  ];
+
+  // currentWeekOffset from the real current week
+  let weekOffset = 0;
+  let state = JSON.parse(localStorage.getItem('goPlanner') || '{}');
+  // state structure: { [weekKey]: { tasks: { [dayIndex]: [...] }, goals: [...] } }
+
+  function getWeekKey(offset) {
+    const d = getMonday(new Date());
+    d.setDate(d.getDate() + offset * 7);
+    return `w${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+  }
+
+  function getMonday(d) {
+    const day = d.getDay();
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+    return new Date(d.setDate(diff));
+  }
+
+  function getWeekData() {
+    const key = getWeekKey(weekOffset);
+    if (!state[key]) state[key] = { tasks: {}, goals: [] };
+    return state[key];
+  }
+
+  function saveState() {
+    localStorage.setItem('goPlanner', JSON.stringify(state));
+    updateSummary();
+  }
+
+  // ── RENDER ─────────────────────────────────────────────────────────────
+  function render() {
+    renderHeader();
+    renderGrid();
+    renderGoals();
+    renderModules();
+    updateSummary();
+  }
+
+  function renderHeader() {
+    const mon = getMonday(new Date());
+    mon.setDate(mon.getDate() + weekOffset * 7);
+    const sun = new Date(mon); sun.setDate(sun.getDate() + 6);
+    const fmt = d => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    document.getElementById('weekLabel').textContent = `${fmt(mon)} – ${fmt(sun)}`;
+  }
+
+  function renderGrid() {
+    const grid = document.getElementById('plannerGrid');
+    grid.innerHTML = '';
+    const today = new Date();
+    const todayDow = (today.getDay() + 6) % 7; // 0=Mon
+    const mon = getMonday(new Date());
+    mon.setDate(mon.getDate() + weekOffset * 7);
+
+    DAYS.forEach((day, i) => {
+      const date = new Date(mon);
+      date.setDate(date.getDate() + i);
+      const isToday = weekOffset === 0 && i === todayDow;
+      const col = document.createElement('div');
+      col.className = 'day-column' + (isToday ? ' today' : '');
+      col.innerHTML = `
+        <div class="day-header">
+          <div class="day-name">${day}</div>
+          ${isToday
+            ? `<div class="day-number" style="background:var(--accent);color:white;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:4px auto 0;font-size:18px">${date.getDate()}</div>`
+            : `<div class="day-number">${date.getDate()}</div>`}
+        </div>
+        <div class="day-body" id="dayBody${i}">
+          ${renderTasks(i)}
+          <button class="add-task-btn" onclick="showAddForm(${i})" id="addBtn${i}">+ Add</button>
+          <div id="addForm${i}" style="display:none"></div>
+        </div>
+      `;
+      grid.appendChild(col);
+    });
+  }
+
+  function renderTasks(dayIdx) {
+    const data = getWeekData();
+    const tasks = data.tasks[dayIdx] || [];
+    return tasks.map((t, ti) => `
+      <div class="task-item ${t.done ? 'done' : ''}" id="task${dayIdx}_${ti}">
+        <button class="task-del" onclick="deleteTask(${dayIdx},${ti})" title="Delete">✕</button>
+        <div class="task-top">
+          <div class="task-check ${t.done ? 'checked' : ''}" onclick="toggleTask(${dayIdx},${ti})">
+            ${t.done ? '✓' : ''}
+          </div>
+          <div class="task-text">${t.text}</div>
+        </div>
+        <div class="task-meta">
+          <span class="task-tag tag-${t.type}">${t.type}</span>
+          ${t.time ? `<span class="task-time">⏱ ${t.time}</span>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function showAddForm(dayIdx) {
+    document.getElementById('addBtn' + dayIdx).style.display = 'none';
+    const form = document.getElementById('addForm' + dayIdx);
+    form.style.display = 'block';
+    form.innerHTML = `
+      <div class="quick-add">
+        <input type="text" id="taskText${dayIdx}" placeholder="Task description…" onkeydown="if(event.key==='Enter')saveTask(${dayIdx})" autofocus>
+        <select id="taskType${dayIdx}">
+          <option value="study">📚 Study</option>
+          <option value="cert">🏆 Certification</option>
+          <option value="task">📝 Assignment</option>
+          <option value="review">🔄 Review</option>
+        </select>
+        <input type="text" id="taskTime${dayIdx}" placeholder="Duration (e.g. 1h, 30m)">
+        <div class="quick-add-actions">
+          <button class="qa-save" onclick="saveTask(${dayIdx})">Add</button>
+          <button class="qa-cancel" onclick="cancelAdd(${dayIdx})">Cancel</button>
+        </div>
+      </div>
+    `;
+    setTimeout(() => document.getElementById('taskText'+dayIdx)?.focus(), 50);
+  }
+
+  function cancelAdd(dayIdx) {
+    document.getElementById('addForm' + dayIdx).style.display = 'none';
+    document.getElementById('addBtn' + dayIdx).style.display = 'flex';
+  }
+
+  function saveTask(dayIdx) {
+    const text = document.getElementById('taskText'+dayIdx)?.value?.trim();
+    if (!text) return;
+    const type = document.getElementById('taskType'+dayIdx).value;
+    const time = document.getElementById('taskTime'+dayIdx).value.trim();
+    const data = getWeekData();
+    if (!data.tasks[dayIdx]) data.tasks[dayIdx] = [];
+    data.tasks[dayIdx].push({ text, type, time, done: false });
+    saveState();
+    renderGrid();
+  }
+
+  function addTemplate(text, type, time) {
+    // Add to today or next available day
+    const today = new Date();
+    const todayDow = (today.getDay() + 6) % 7;
+    const dayIdx = weekOffset === 0 ? todayDow : 0;
+    const data = getWeekData();
+    if (!data.tasks[dayIdx]) data.tasks[dayIdx] = [];
+    data.tasks[dayIdx].push({ text, type, time, done: false });
+    saveState();
+    renderGrid();
+  }
+
+  function toggleTask(dayIdx, taskIdx) {
+    const data = getWeekData();
+    if (data.tasks[dayIdx] && data.tasks[dayIdx][taskIdx]) {
+      data.tasks[dayIdx][taskIdx].done = !data.tasks[dayIdx][taskIdx].done;
+      saveState();
+      renderGrid();
+    }
+  }
+
+  function deleteTask(dayIdx, taskIdx) {
+    const data = getWeekData();
+    if (data.tasks[dayIdx]) {
+      data.tasks[dayIdx].splice(taskIdx, 1);
+      saveState();
+      renderGrid();
+    }
+  }
+
+  function renderGoals() {
+    const data = getWeekData();
+    const list = document.getElementById('goalsList');
+    list.innerHTML = (data.goals || []).map(g => `
+      <div class="goal-item">
+        <div class="goal-dot"></div>
+        <span>${g}</span>
+      </div>
+    `).join('');
+  }
+
+  function addGoal() {
+    const input = document.getElementById('goalInput');
+    const text = input.value.trim();
+    if (!text) return;
+    const data = getWeekData();
+    if (!data.goals) data.goals = [];
+    data.goals.push(text);
+    input.value = '';
+    saveState();
+    renderGoals();
+  }
+
+  function renderModules() {
+    const list = document.getElementById('moduleList');
+    list.innerHTML = MODULES.map(m => `
+      <div class="module-row" onclick="addTemplate('Study M${m.n}: ${m.title}', 'study', '1.5h')">
+        <div class="module-num">${m.n}</div>
+        <span class="module-title">${m.title}</span>
+        <span class="module-weeks">Wk ${m.weeks}</span>
+      </div>
+    `).join('');
+  }
+
+  function updateSummary() {
+    const data = getWeekData();
+    let totalTasks = 0, doneTasks = 0, totalHours = 0;
+    let certTasks = 0;
+
+    Object.values(data.tasks || {}).forEach(dayTasks => {
+      dayTasks.forEach(t => {
+        totalTasks++;
+        if (t.done) doneTasks++;
+        if (t.type === 'cert') certTasks++;
+        if (t.time) {
+          const h = parseFloat(t.time);
+          if (t.time.includes('m')) totalHours += h / 60;
+          else totalHours += h || 0;
+        }
+      });
+    });
+
+    const targetHours = 6;
+    document.getElementById('hoursVal').innerHTML = `${totalHours.toFixed(1)}<span>h</span>`;
+    document.getElementById('hoursBar').style.width = Math.min(100, (totalHours/targetHours)*100) + '%';
+    document.getElementById('tasksVal').innerHTML = `${doneTasks}<span>/${totalTasks}</span>`;
+    document.getElementById('tasksBar').style.width = totalTasks ? Math.round((doneTasks/totalTasks)*100)+'%' : '0%';
+    document.getElementById('certVal').innerHTML = `${certTasks}<span></span>`;
+
+    // Simple streak: count consecutive weeks with tasks
+    let streak = 0;
+    for (let w = 0; w >= -52; w--) {
+      const wk = getWeekKey(w);
+      const wd = state[wk];
+      if (!wd) break;
+      const hasTasks = Object.values(wd.tasks || {}).some(d => d.length > 0);
+      if (hasTasks) streak++;
+      else break;
+    }
+    document.getElementById('streakVal').innerHTML = `${streak || 1}<span>d</span>`;
+  }
+
+  function changeWeek(delta) {
+    weekOffset += delta;
+    render();
+  }
+
+  function goToToday() {
+    weekOffset = 0;
+    render();
+  }
+
+  // ── INIT ───────────────────────────────────────────────────────────────
+  render();
+</script>
+</body>
+</html>

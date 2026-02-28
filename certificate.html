@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Certificate of Completion — Grow Online Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;1,9..144,400;1,9..144,600&family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:    #0f0e0d;
+    --paper:  #faf8f4;
+    --gold:   #c49a2a;
+    --gold-l: #f5e9c4;
+    --accent: #d4541a;
+    --mid:    #7a7168;
+    --border: #e3dcd0;
+    --f-d: 'Fraunces', Georgia, serif;
+    --f-b: 'DM Sans', system-ui, sans-serif;
+    --f-m: 'DM Mono', monospace;
+  }
+
+  body {
+    background: #ddd;
+    display: flex; flex-direction: column; align-items: center;
+    min-height: 100vh; padding: 40px 20px;
+    font-family: var(--f-b);
+  }
+
+  /* Controls */
+  .controls {
+    display: flex; gap: 12px; margin-bottom: 24px; align-items: center;
+    background: white; padding: 12px 20px; border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    flex-wrap: wrap; justify-content: center;
+  }
+  .controls label { font-size: 13px; color: #555; font-weight: 500; }
+  .controls input {
+    height: 36px; padding: 0 12px; border: 1px solid #ddd; border-radius: 6px;
+    font-family: var(--f-b); font-size: 14px; min-width: 240px;
+    outline: none;
+  }
+  .controls input:focus { border-color: var(--accent); }
+  .print-btn {
+    height: 36px; padding: 0 20px; background: var(--ink); color: white;
+    border: none; border-radius: 6px; font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .print-btn:hover { background: var(--accent); }
+
+  /* Certificate */
+  .cert-wrap {
+    width: 297mm; /* A4 landscape */
+    background: var(--paper);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Decorative border system */
+  .border-outer {
+    position: absolute; inset: 0;
+    border: 3px solid var(--gold);
+  }
+  .border-inner {
+    position: absolute; inset: 12px;
+    border: 1px solid var(--gold);
+  }
+
+  /* Corner ornaments */
+  .corner {
+    position: absolute; width: 60px; height: 60px;
+  }
+  .corner svg { width: 100%; height: 100%; }
+  .corner-tl { top: 0; left: 0; }
+  .corner-tr { top: 0; right: 0; transform: scaleX(-1); }
+  .corner-bl { bottom: 0; left: 0; transform: scaleY(-1); }
+  .corner-br { bottom: 0; right: 0; transform: scale(-1); }
+
+  /* Content */
+  .cert-inner {
+    position: relative; z-index: 1;
+    padding: 56px 80px;
+    display: grid; grid-template-columns: 1fr 2px 1fr; gap: 0;
+    min-height: 210mm;
+  }
+
+  .divider {
+    background: linear-gradient(to bottom, transparent, var(--gold) 20%, var(--gold) 80%, transparent);
+    margin: 0 40px;
+  }
+
+  /* Left panel */
+  .left-panel {
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding-right: 40px;
+  }
+
+  .logo-block { }
+  .logo-word {
+    font-family: var(--f-d); font-size: 22px; font-weight: 700;
+    letter-spacing: -0.02em; line-height: 1;
+  }
+  .logo-dot { color: var(--accent); }
+  .logo-sub {
+    font-family: var(--f-m); font-size: 10px; color: var(--mid);
+    letter-spacing: 0.14em; text-transform: uppercase; margin-top: 4px;
+  }
+
+  .cert-type {
+    font-family: var(--f-m); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 8px;
+  }
+  .cert-title {
+    font-family: var(--f-d); font-size: 48px; font-weight: 300; line-height: 1.0;
+    letter-spacing: -0.03em; color: var(--ink);
+  }
+  .cert-title em { font-style: italic; color: var(--accent); display: block; }
+  .cert-title span { display: block; }
+
+  .gold-line {
+    width: 48px; height: 2px; background: var(--gold); margin: 20px 0;
+  }
+
+  .awarded-to {
+    font-family: var(--f-m); font-size: 10px; color: var(--mid);
+    letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .student-name {
+    font-family: var(--f-d); font-size: 36px; font-weight: 400;
+    font-style: italic; color: var(--ink); line-height: 1.1;
+    min-height: 44px; border-bottom: 1px solid var(--border);
+    padding-bottom: 4px;
+    letter-spacing: -0.01em;
+    id: studentNameDisplay;
+  }
+
+  .completion-text {
+    font-size: 14px; color: var(--mid); line-height: 1.6; margin-top: 16px;
+  }
+  .completion-text strong { color: var(--ink); font-weight: 600; }
+
+  /* Right panel */
+  .right-panel {
+    padding-left: 40px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+
+  .programme-label {
+    font-family: var(--f-m); font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 12px;
+  }
+  .programme-name {
+    font-family: var(--f-d); font-size: 20px; font-weight: 500;
+    letter-spacing: -0.02em; color: var(--ink); line-height: 1.2;
+    margin-bottom: 20px;
+  }
+
+  .achievements {
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .achievement {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px;
+    background: white; border: 1px solid var(--border); border-radius: 8px;
+    border-left: 3px solid var(--gold);
+  }
+  .achievement-icon { font-size: 16px; width: 24px; text-align: center; }
+  .achievement-text { }
+  .achievement-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .achievement-detail { font-size: 11px; color: var(--mid); font-family: var(--f-m); margin-top: 1px; }
+
+  /* Signature row */
+  .sig-row {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 24px; align-items: end;
+    margin-top: 24px;
+  }
+  .sig-block { }
+  .sig-line { height: 1px; background: var(--border); margin-bottom: 8px; }
+  .sig-name { font-family: var(--f-d); font-size: 16px; font-style: italic; color: var(--ink); }
+  .sig-role { font-size: 11px; color: var(--mid); font-family: var(--f-m); letter-spacing: 0.06em; text-transform: uppercase; }
+
+  .seal {
+    width: 80px; height: 80px; position: absolute; right: 88px; bottom: 64px;
+  }
+  .seal svg { width: 100%; height: 100%; }
+
+  .issue-date {
+    font-family: var(--f-m); font-size: 11px; color: var(--mid);
+    margin-top: 8px; letter-spacing: 0.06em;
+  }
+
+  /* Background watermark */
+  .watermark {
+    position: absolute; inset: 0; display: flex;
+    align-items: center; justify-content: center; opacity: 0.025;
+    pointer-events: none;
+    font-family: var(--f-d); font-size: 180px; font-weight: 700;
+    color: var(--ink); letter-spacing: -0.05em;
+    overflow: hidden; user-select: none;
+  }
+
+  @media print {
+    body { background: none; padding: 0; }
+    .controls { display: none; }
+    .cert-wrap { box-shadow: none; }
+    @page { size: A4 landscape; margin: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <label>Student Name:</label>
+  <input type="text" id="nameInput" placeholder="Enter student's full name…" value="Alex Johnson">
+  <label>Date:</label>
+  <input type="text" id="dateInput" placeholder="e.g. June 2026" value="June 2026">
+  <button class="print-btn" onclick="window.print()">🖨 Print / Save PDF</button>
+</div>
+
+<div class="cert-wrap" id="cert">
+  <div class="watermark">GOD</div>
+
+  <div class="border-outer"></div>
+  <div class="border-inner"></div>
+
+  <!-- Corner ornaments -->
+  <div class="corner corner-tl">
+    <svg viewBox="0 0 60 60" fill="none">
+      <path d="M0 0 L0 60 L8 52 L8 8 L52 8 L60 0 Z" fill="#c49a2a" opacity="0.25"/>
+      <path d="M0 0 L0 24 L4 20 L4 4 L20 4 L24 0 Z" fill="#c49a2a" opacity="0.6"/>
+      <circle cx="0" cy="0" r="4" fill="#c49a2a"/>
+    </svg>
+  </div>
+  <div class="corner corner-tr">
+    <svg viewBox="0 0 60 60" fill="none">
+      <path d="M0 0 L0 60 L8 52 L8 8 L52 8 L60 0 Z" fill="#c49a2a" opacity="0.25"/>
+      <path d="M0 0 L0 24 L4 20 L4 4 L20 4 L24 0 Z" fill="#c49a2a" opacity="0.6"/>
+      <circle cx="0" cy="0" r="4" fill="#c49a2a"/>
+    </svg>
+  </div>
+  <div class="corner corner-bl">
+    <svg viewBox="0 0 60 60" fill="none">
+      <path d="M0 0 L0 60 L8 52 L8 8 L52 8 L60 0 Z" fill="#c49a2a" opacity="0.25"/>
+      <path d="M0 0 L0 24 L4 20 L4 4 L20 4 L24 0 Z" fill="#c49a2a" opacity="0.6"/>
+      <circle cx="0" cy="0" r="4" fill="#c49a2a"/>
+    </svg>
+  </div>
+  <div class="corner corner-br">
+    <svg viewBox="0 0 60 60" fill="none">
+      <path d="M0 0 L0 60 L8 52 L8 8 L52 8 L60 0 Z" fill="#c49a2a" opacity="0.25"/>
+      <path d="M0 0 L0 24 L4 20 L4 4 L20 4 L24 0 Z" fill="#c49a2a" opacity="0.6"/>
+      <circle cx="0" cy="0" r="4" fill="#c49a2a"/>
+    </svg>
+  </div>
+
+  <div class="cert-inner">
+
+    <!-- LEFT -->
+    <div class="left-panel">
+      <div class="logo-block">
+        <div class="logo-word">Grow Online Digital<span class="logo-dot">.</span></div>
+        <div class="logo-sub">Digital Marketing Academy</div>
+      </div>
+
+      <div>
+        <div class="cert-type">Certificate of Completion</div>
+        <h1 class="cert-title">
+          <span>This is to</span>
+          <em>certify that</em>
+        </h1>
+        <div class="gold-line"></div>
+        <div class="awarded-to">Awarded to</div>
+        <div class="student-name" id="nameDisplay">Alex Johnson</div>
+        <p class="completion-text">
+          has successfully completed all <strong>11 modules</strong> and earned
+          <strong>8+ industry certifications</strong> across the full 30-week curriculum,
+          demonstrating proficiency in modern digital marketing and AI-integrated strategies.
+        </p>
+      </div>
+
+      <div class="sig-row">
+        <div class="sig-block">
+          <div class="sig-line"></div>
+          <div class="sig-name">PKB</div>
+          <div class="sig-role">Digital Marketing Trainer</div>
+          <div class="sig-role">Grow Online Digital</div>
+          <div class="issue-date" id="dateDisplay">Issued: June 2026</div>
+        </div>
+        <div class="sig-block">
+          <div class="sig-line"></div>
+          <div class="sig-name">Director</div>
+          <div class="sig-role">Grow Online Digital</div>
+          <div class="sig-role">Digital Academy</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="divider"></div>
+
+    <!-- RIGHT -->
+    <div class="right-panel">
+      <div>
+        <div class="programme-label">Programme Completed</div>
+        <div class="programme-name">Digital Marketing Academy<br>2025–2026 Edition · AI-Integrated</div>
+
+        <div class="achievements">
+          <div class="achievement">
+            <div class="achievement-icon">🎓</div>
+            <div class="achievement-text">
+              <div class="achievement-name">Google Digital Garage</div>
+              <div class="achievement-detail">Fundamentals of Digital Marketing</div>
+            </div>
+          </div>
+          <div class="achievement">
+            <div class="achievement-icon">🔍</div>
+            <div class="achievement-text">
+              <div class="achievement-name">Semrush Academy</div>
+              <div class="achievement-detail">SEO Fundamentals Certification</div>
+            </div>
+          </div>
+          <div class="achievement">
+            <div class="achievement-icon">🎯</div>
+            <div class="achievement-text">
+              <div class="achievement-name">Google Skillshop</div>
+              <div class="achievement-detail">Google Ads Search Certification</div>
+            </div>
+          </div>
+          <div class="achievement">
+            <div class="achievement-icon">📊</div>
+            <div class="achievement-text">
+              <div class="achievement-name">Google Skillshop</div>
+              <div class="achievement-detail">Google Analytics Certification</div>
+            </div>
+          </div>
+          <div class="achievement">
+            <div class="achievement-icon">✉️</div>
+            <div class="achievement-text">
+              <div class="achievement-name">HubSpot Academy</div>
+              <div class="achievement-detail">Email Marketing + Content + Inbound Certifications</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:right; margin-top:16px;">
+        <!-- Seal -->
+        <svg width="88" height="88" viewBox="0 0 88 88">
+          <!-- Outer ring -->
+          <circle cx="44" cy="44" r="42" fill="none" stroke="#c49a2a" stroke-width="1.5" stroke-dasharray="4 2"/>
+          <circle cx="44" cy="44" r="36" fill="#f5e9c4" stroke="#c49a2a" stroke-width="1"/>
+          <!-- Star burst -->
+          <g transform="translate(44,44)">
+            <polygon points="0,-30 4,-10 14,-20 6,-4 26,0 6,4 14,20 4,10 0,30 -4,10 -14,20 -6,4 -26,0 -6,-4 -14,-20 -4,-10" fill="#c49a2a" opacity="0.3"/>
+          </g>
+          <!-- Inner circle -->
+          <circle cx="44" cy="44" r="26" fill="none" stroke="#c49a2a" stroke-width="1"/>
+          <!-- Text -->
+          <text x="44" y="36" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-size="7" fill="#c49a2a" font-weight="700" letter-spacing="1">GROW</text>
+          <text x="44" y="46" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-size="6" fill="#7a7168" letter-spacing="0.5">ONLINE</text>
+          <text x="44" y="55" text-anchor="middle" font-family="DM Mono, monospace" font-size="5" fill="#7a7168" letter-spacing="1">DIGITAL</text>
+          <text x="44" y="63" text-anchor="middle" font-family="DM Mono, monospace" font-size="4.5" fill="#c49a2a" letter-spacing="1">CERTIFIED</text>
+        </svg>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const nameInput = document.getElementById('nameInput');
+const dateInput = document.getElementById('dateInput');
+const nameDisplay = document.getElementById('nameDisplay');
+const dateDisplay = document.getElementById('dateDisplay');
+
+nameInput.addEventListener('input', () => {
+  nameDisplay.textContent = nameInput.value || 'Student Name';
+});
+dateInput.addEventListener('input', () => {
+  dateDisplay.textContent = 'Issued: ' + (dateInput.value || '—');
+});
+</script>
+</body>
+</html>

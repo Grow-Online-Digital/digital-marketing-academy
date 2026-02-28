@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tool Directory — Grow Online Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --paper:   #faf8f4;
+    --cream:   #f2ede4;
+    --border:  #e3dcd0;
+    --mid:     #b5aea0;
+    --dim:     #7a7168;
+    --ink:     #0f0e0d;
+    --accent:  #d4541a;
+    --accent-bg: #fdf1ea;
+    --green:   #3d7a4f;
+    --green-bg:#edf5ef;
+    --blue:    #2459a8;
+    --blue-bg: #eaf0fb;
+
+    --f-display: 'Fraunces', Georgia, serif;
+    --f-body:    'DM Sans', system-ui, sans-serif;
+    --f-mono:    'DM Mono', 'Courier New', monospace;
+  }
+
+  html { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 16px; }
+
+  /* ── Header ── */
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--paper); border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .logo { font-family: var(--f-display); font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 24px; font-size: 14px; color: var(--dim); }
+  .nav-links a { color: inherit; text-decoration: none; }
+  .nav-links a:hover { color: var(--ink); }
+
+  /* ── Hero ── */
+  .hero {
+    padding: 64px 40px 48px;
+    border-bottom: 1px solid var(--border);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: end;
+    max-width: 1280px; margin: 0 auto;
+  }
+  .hero-label {
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--f-display); font-size: clamp(36px, 5vw, 56px);
+    font-weight: 300; line-height: 1.05; letter-spacing: -0.03em;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero-sub { color: var(--dim); font-size: 17px; line-height: 1.6; }
+  .hero-stats { display: flex; gap: 32px; margin-top: 24px; }
+  .stat { }
+  .stat-num { font-family: var(--f-display); font-size: 32px; font-weight: 500; line-height: 1; }
+  .stat-label { font-size: 12px; color: var(--dim); margin-top: 4px; font-family: var(--f-mono); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* ── Controls ── */
+  .controls-bar {
+    position: sticky; top: 60px; z-index: 90;
+    background: var(--paper); border-bottom: 1px solid var(--border);
+    padding: 16px 40px;
+  }
+  .controls-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+  }
+  .search-wrap {
+    position: relative; flex: 1; min-width: 240px;
+  }
+  .search-wrap svg {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--mid);
+  }
+  .search-input {
+    width: 100%; height: 44px; padding: 0 16px 0 44px;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: white; font-family: var(--f-body); font-size: 15px; color: var(--ink);
+    outline: none; transition: border-color 0.15s;
+  }
+  .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
+  .search-input::placeholder { color: var(--mid); }
+
+  .pill-group { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pill {
+    height: 36px; padding: 0 14px; border-radius: 100px;
+    border: 1px solid var(--border); background: white;
+    font-family: var(--f-body); font-size: 13px; font-weight: 500; color: var(--dim);
+    cursor: pointer; transition: all 0.15s; white-space: nowrap;
+  }
+  .pill:hover { border-color: var(--ink); color: var(--ink); }
+  .pill.active { background: var(--ink); border-color: var(--ink); color: white; }
+  .pill.active-accent { background: var(--accent); border-color: var(--accent); color: white; }
+
+  .results-info {
+    font-size: 13px; color: var(--dim); font-family: var(--f-mono);
+    padding: 8px 40px;
+    max-width: 1280px; margin: 0 auto;
+  }
+
+  /* ── Grid ── */
+  .grid-wrap { max-width: 1280px; margin: 0 auto; padding: 24px 40px 64px; }
+  .tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+  }
+
+  /* ── Tool Card ── */
+  .tool-card {
+    background: white; border: 1px solid var(--border); border-radius: 12px;
+    padding: 24px; display: flex; flex-direction: column; gap: 12px;
+    transition: border-color 0.15s, transform 0.15s;
+    animation: fadeUp 0.3s ease both;
+  }
+  .tool-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .tool-card.hidden { display: none; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .card-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .card-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+  .badge {
+    height: 22px; padding: 0 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 600; font-family: var(--f-mono);
+    letter-spacing: 0.04em; display: flex; align-items: center;
+  }
+  .badge-free   { background: var(--green-bg);  color: var(--green); }
+  .badge-paid   { background: var(--blue-bg);   color: var(--blue); }
+  .badge-cert   { background: var(--accent-bg); color: var(--accent); }
+
+  .tool-name { font-family: var(--f-display); font-size: 18px; font-weight: 500; letter-spacing: -0.02em; }
+  .tool-purpose { font-size: 14px; color: var(--dim); line-height: 1.5; }
+  .tool-free-tier { font-size: 12px; color: var(--dim); font-family: var(--f-mono); }
+  .tool-free-tier strong { color: var(--green); }
+
+  .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+  .module-tag {
+    font-size: 11px; font-family: var(--f-mono); color: var(--mid);
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .visit-btn {
+    height: 32px; padding: 0 14px; border-radius: 6px;
+    background: var(--ink); color: white; font-size: 13px; font-weight: 500;
+    font-family: var(--f-body); border: none; cursor: pointer;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+    transition: background 0.15s;
+  }
+  .visit-btn:hover { background: var(--accent); }
+  .visit-btn svg { width: 12px; height: 12px; }
+
+  /* ── Category section headers ── */
+  .section-label {
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--mid);
+    grid-column: 1 / -1; padding-top: 8px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* No results */
+  .no-results {
+    grid-column: 1 / -1; text-align: center; padding: 64px 0;
+    font-family: var(--f-display); font-size: 24px; color: var(--mid); font-style: italic;
+  }
+
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; gap: 24px; padding: 40px 24px; }
+    .controls-bar, .grid-wrap, .results-info { padding-left: 24px; padding-right: 24px; }
+    .site-header { padding: 0 24px; }
+    .tool-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo">Grow Online Digital<span>.</span></div>
+  <nav class="nav-links">
+    <a href="#">Dashboard</a>
+    <a href="#">Curriculum</a>
+    <a href="#" style="color:var(--accent); font-weight:600;">Tools</a>
+    <a href="#">Progress</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div>
+    <div class="hero-label">Essential Tools Guide · 2025–2026</div>
+    <h1>Every tool you'll <em>ever</em> need.</h1>
+  </div>
+  <div>
+    <p class="hero-sub">All tools listed have free plans suitable for learning. Search, filter by category or module, and open any tool directly from here.</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">42</div><div class="stat-label">Total Tools</div></div>
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Free Tiers</div></div>
+      <div class="stat"><div class="stat-num">9</div><div class="stat-label">Categories</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="controls-bar">
+  <div class="controls-inner">
+    <div class="search-wrap">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="search-input" type="text" placeholder="Search tools…" id="searchInput">
+    </div>
+    <div class="pill-group" id="catFilter">
+      <button class="pill active" data-cat="all">All</button>
+      <button class="pill" data-cat="ai">AI & Productivity</button>
+      <button class="pill" data-cat="seo">SEO & Search</button>
+      <button class="pill" data-cat="ads">Paid Ads</button>
+      <button class="pill" data-cat="social">Social Media</button>
+      <button class="pill" data-cat="email">Email</button>
+      <button class="pill" data-cat="analytics">Analytics</button>
+      <button class="pill" data-cat="web">Website Building</button>
+      <button class="pill" data-cat="content">Content & Media</button>
+      <button class="pill" data-cat="learning">Learning</button>
+    </div>
+  </div>
+</div>
+
+<div class="results-info" id="resultsInfo">Showing all 42 tools</div>
+
+<div class="grid-wrap">
+  <div class="tool-grid" id="toolGrid"></div>
+</div>
+
+<script>
+const tools = [
+  // AI & Productivity
+  { name: 'ChatGPT', cat: 'ai', icon: '🤖', purpose: 'AI content generation, research, brainstorming, ad copy', freeTier: 'Free plan with GPT-4o mini access', modules: ['M1','M3','M4','M8'], url: 'https://chat.openai.com', cert: false },
+  { name: 'Claude', cat: 'ai', icon: '✦', purpose: 'AI analysis, writing, strategy development, long-form content', freeTier: 'Free plan available', modules: ['M1','M8'], url: 'https://claude.ai', cert: false },
+  { name: 'Gemini', cat: 'ai', icon: '♊', purpose: "Google's AI assistant — research, image generation, Google integration", freeTier: 'Free with Google account', modules: ['M1','M8'], url: 'https://gemini.google.com', cert: false },
+  { name: 'Canva', cat: 'ai', icon: '🎨', purpose: 'AI-powered design, social graphics, presentations, video editing', freeTier: 'Free plan with extensive AI features', modules: ['M1','M5','M6','M11'], url: 'https://www.canva.com', cert: false },
+  { name: 'Grammarly', cat: 'ai', icon: '✏️', purpose: 'Writing assistant — grammar, tone, clarity suggestions', freeTier: 'Free browser extension', modules: ['M8'], url: 'https://www.grammarly.com', cert: false },
+  { name: 'Hemingway Editor', cat: 'ai', icon: '📝', purpose: 'Readability scoring and sentence simplification', freeTier: 'Free web version', modules: ['M8'], url: 'https://hemingwayapp.com', cert: false },
+  { name: 'Loom', cat: 'ai', icon: '🎥', purpose: 'Screen recording for presentations and client updates', freeTier: 'Free plan (25 videos)', modules: ['M11'], url: 'https://www.loom.com', cert: false },
+  { name: 'Trello', cat: 'ai', icon: '📋', purpose: 'Project management, content calendars, campaign planning', freeTier: 'Free plan available', modules: ['M6','M8'], url: 'https://trello.com', cert: false },
+
+  // SEO
+  { name: 'Google Search Console', cat: 'seo', icon: '🔍', purpose: 'Search performance monitoring, indexing issues, Core Web Vitals', freeTier: 'Completely free', modules: ['M3'], url: 'https://search.google.com/search-console', cert: false },
+  { name: 'Google Trends', cat: 'seo', icon: '📈', purpose: 'Search trend analysis, seasonal patterns, topic comparison', freeTier: 'Completely free', modules: ['M3'], url: 'https://trends.google.com', cert: false },
+  { name: 'Ahrefs Free Tools', cat: 'seo', icon: '🔗', purpose: 'Keyword research, backlink analysis, site audit', freeTier: 'Free tools — no account needed', modules: ['M3'], url: 'https://ahrefs.com/free-seo-tools', cert: false },
+  { name: 'Semrush', cat: 'seo', icon: '🏆', purpose: 'SEO audits, keyword tracking, competitive analysis', freeTier: 'Free tier: 10 queries/day', modules: ['M3'], url: 'https://www.semrush.com', cert: true },
+  { name: 'Ubersuggest', cat: 'seo', icon: '💡', purpose: 'Keyword suggestions, content ideas, site audit', freeTier: 'Free: 3 searches/day', modules: ['M3'], url: 'https://neilpatel.com/ubersuggest/', cert: false },
+  { name: 'AnswerThePublic', cat: 'seo', icon: '❓', purpose: 'Question-based keyword research and content ideation', freeTier: 'Free: 3 searches/day', modules: ['M3'], url: 'https://answerthepublic.com', cert: false },
+  { name: 'MozBar', cat: 'seo', icon: '🔭', purpose: 'Browser extension for real-time SEO metrics on any page', freeTier: 'Free browser extension', modules: ['M3'], url: 'https://moz.com/products/pro/seo-toolbar', cert: false },
+  { name: 'Google Business Profile', cat: 'seo', icon: '📍', purpose: 'Local SEO and business listing management', freeTier: 'Completely free', modules: ['M3'], url: 'https://www.google.com/business/', cert: false },
+  { name: 'PageSpeed Insights', cat: 'seo', icon: '⚡', purpose: 'Page speed testing and Core Web Vitals analysis', freeTier: 'Completely free', modules: ['M2','M3'], url: 'https://pagespeed.web.dev', cert: false },
+  { name: 'Greenflare', cat: 'seo', icon: '🌿', purpose: 'Open-source SEO site crawler — unlimited URL technical audits', freeTier: 'Completely free (unlimited)', modules: ['M3'], url: 'https://greenflare.io', cert: false },
+
+  // Paid Ads
+  { name: 'Google Ads', cat: 'ads', icon: '🎯', purpose: 'Search, Display, Shopping, Video, Performance Max campaigns', freeTier: 'Free to set up — pay per click', modules: ['M4'], url: 'https://ads.google.com', cert: true },
+  { name: 'Google Keyword Planner', cat: 'ads', icon: '🗝️', purpose: 'PPC keyword research with search volume data', freeTier: 'Free with Google Ads account', modules: ['M4'], url: 'https://ads.google.com/home/tools/keyword-planner/', cert: false },
+  { name: 'Google Ads Editor', cat: 'ads', icon: '🖥️', purpose: 'Desktop campaign management and bulk editing', freeTier: 'Completely free', modules: ['M4'], url: 'https://ads.google.com/home/tools/ads-editor/', cert: false },
+  { name: 'Meta Ads Manager', cat: 'ads', icon: '📘', purpose: 'Facebook & Instagram ad creation and campaign management', freeTier: 'Free to set up — pay per impression/click', modules: ['M5'], url: 'https://adsmanager.facebook.com', cert: true },
+  { name: 'TikTok Ads Manager', cat: 'ads', icon: '🎵', purpose: 'TikTok advertising platform with Spark Ads and in-feed ads', freeTier: 'Free to set up', modules: ['M5'], url: 'https://ads.tiktok.com', cert: false },
+  { name: 'LinkedIn Campaign Manager', cat: 'ads', icon: '💼', purpose: 'B2B advertising with professional audience targeting', freeTier: 'Free to set up', modules: ['M5'], url: 'https://www.linkedin.com/campaignmanager', cert: false },
+  { name: 'SpyFu', cat: 'ads', icon: '🕵️', purpose: 'Competitor PPC research and keyword intelligence', freeTier: 'Limited free searches', modules: ['M4','M5'], url: 'https://www.spyfu.com', cert: false },
+
+  // Social
+  { name: 'Buffer', cat: 'social', icon: '🗓️', purpose: 'Social media scheduling and performance analytics', freeTier: 'Free: 3 channels, 10 posts/channel queue', modules: ['M6'], url: 'https://buffer.com', cert: false },
+  { name: 'Later', cat: 'social', icon: '📅', purpose: 'Visual social planner with Instagram focus', freeTier: 'Free: 1 social set, 5 posts/month', modules: ['M6'], url: 'https://later.com', cert: false },
+  { name: 'Meta Business Suite', cat: 'social', icon: '👤', purpose: 'Facebook & Instagram management, scheduling, and insights', freeTier: 'Completely free', modules: ['M5','M6'], url: 'https://business.facebook.com', cert: false },
+  { name: 'CapCut', cat: 'social', icon: '✂️', purpose: 'Short-form video editing for TikTok, Reels, and Shorts', freeTier: 'Completely free (desktop + mobile)', modules: ['M6'], url: 'https://www.capcut.com', cert: false },
+
+  // Email
+  { name: 'Brevo', cat: 'email', icon: '📧', purpose: 'Email & SMS marketing automation with generous free tier', freeTier: '300 emails/day · Unlimited contacts', modules: ['M7'], url: 'https://www.brevo.com', cert: false },
+  { name: 'MailerLite', cat: 'email', icon: '💌', purpose: 'Email campaigns, landing pages, and automation workflows', freeTier: '12,000 emails/month · 1,000 subscribers', modules: ['M7'], url: 'https://www.mailerlite.com', cert: false },
+  { name: 'Mailchimp', cat: 'email', icon: '🐵', purpose: 'Email campaigns with templates and basic automation', freeTier: '500 emails/month · 250 contacts', modules: ['M7'], url: 'https://mailchimp.com', cert: false },
+  { name: 'Resend', cat: 'email', icon: '🚀', purpose: 'Developer-friendly transactional & marketing email', freeTier: '3,000 emails/month · 1,000 marketing contacts', modules: ['M7'], url: 'https://resend.com', cert: false },
+
+  // Analytics
+  { name: 'Google Analytics 4', cat: 'analytics', icon: '📊', purpose: 'Website analytics, conversion tracking, user behaviour reporting', freeTier: 'Completely free', modules: ['M9'], url: 'https://analytics.google.com', cert: true },
+  { name: 'Google Looker Studio', cat: 'analytics', icon: '📉', purpose: 'Visual dashboards, custom reports, and data visualisation', freeTier: 'Completely free', modules: ['M9'], url: 'https://lookerstudio.google.com', cert: false },
+  { name: 'Google Tag Manager', cat: 'analytics', icon: '🏷️', purpose: 'Tag management, conversion tracking, and event setup', freeTier: 'Completely free', modules: ['M2','M4','M9'], url: 'https://tagmanager.google.com', cert: false },
+  { name: 'Hotjar', cat: 'analytics', icon: '🔥', purpose: 'Heatmaps, session recordings, and user feedback collection', freeTier: 'Free: 35 daily sessions', modules: ['M2','M9'], url: 'https://www.hotjar.com', cert: false },
+
+  // Website
+  { name: 'WordPress.com', cat: 'web', icon: '📰', purpose: 'Website and blog creation with extensive plugin ecosystem', freeTier: 'Free plan (WordPress.com subdomain)', modules: ['M2'], url: 'https://wordpress.com', cert: false },
+  { name: 'Wix', cat: 'web', icon: '🌐', purpose: 'Drag-and-drop website builder for non-developers', freeTier: 'Free plan (Wix subdomain)', modules: ['M2'], url: 'https://www.wix.com', cert: false },
+  { name: 'Carrd', cat: 'web', icon: '🃏', purpose: 'Simple one-page websites and landing pages', freeTier: 'Free plan (3 sites)', modules: ['M2'], url: 'https://carrd.co', cert: false },
+
+  // Content
+  { name: 'Unsplash', cat: 'content', icon: '📷', purpose: 'High-quality free stock photography, royalty-free', freeTier: 'Completely free', modules: ['M8'], url: 'https://unsplash.com', cert: false },
+  { name: 'Pexels', cat: 'content', icon: '🖼️', purpose: 'Free stock photos and videos for commercial use', freeTier: 'Completely free', modules: ['M8'], url: 'https://www.pexels.com', cert: false },
+
+  // Learning
+  { name: 'Google Skillshop', cat: 'learning', icon: '🎓', purpose: 'Google Ads, Analytics, and Tag Manager certifications', freeTier: 'Free certifications', modules: ['M4','M9'], url: 'https://skillshop.withgoogle.com', cert: true },
+  { name: 'HubSpot Academy', cat: 'learning', icon: '🎓', purpose: 'Marketing, Sales, and CRM certifications', freeTier: 'Free certifications', modules: ['M1','M5','M7','M8','M10'], url: 'https://academy.hubspot.com', cert: true },
+  { name: 'Semrush Academy', cat: 'learning', icon: '🎓', purpose: 'SEO, PPC, and content marketing certifications', freeTier: 'Free certifications', modules: ['M3','M4'], url: 'https://www.semrush.com/academy/', cert: true },
+  { name: 'Google Digital Garage', cat: 'learning', icon: '🎓', purpose: 'Fundamentals of Digital Marketing — 26 modules', freeTier: 'Free certification', modules: ['M1'], url: 'https://learndigital.withgoogle.com/digitalgarage', cert: true },
+];
+
+const catLabels = {
+  ai: 'AI & Productivity', seo: 'SEO & Search', ads: 'Paid Advertising',
+  social: 'Social Media', email: 'Email Marketing', analytics: 'Analytics & Reporting',
+  web: 'Website Building', content: 'Content & Media', learning: 'Learning Platforms'
+};
+const catColors = {
+  ai:'#f0e8ff', seo:'#e8f4e8', ads:'#fff0e8', social:'#e8f0ff',
+  email:'#ffe8f0', analytics:'#e8fff4', web:'#f4e8ff', content:'#fff8e8', learning:'#e8f8ff'
+};
+
+function render(list, query='') {
+  const grid = document.getElementById('toolGrid');
+  grid.innerHTML = '';
+  if (!list.length) {
+    grid.innerHTML = `<div class="no-results">No tools found for "${query}"</div>`;
+    document.getElementById('resultsInfo').textContent = '0 tools found';
+    return;
+  }
+  // Group by category
+  const grouped = {};
+  list.forEach(t => {
+    if (!grouped[t.cat]) grouped[t.cat] = [];
+    grouped[t.cat].push(t);
+  });
+
+  let count = 0;
+  Object.entries(grouped).forEach(([cat, items]) => {
+    const label = document.createElement('div');
+    label.className = 'section-label';
+    label.textContent = catLabels[cat] || cat;
+    grid.appendChild(label);
+
+    items.forEach((t, i) => {
+      count++;
+      const card = document.createElement('div');
+      card.className = 'tool-card';
+      card.style.animationDelay = `${i * 0.04}s`;
+
+      const moduleStr = t.modules.map(m => m).join(' · ');
+      const certBadge = t.cert ? `<span class="badge badge-cert">CERT</span>` : '';
+
+      card.innerHTML = `
+        <div class="card-top">
+          <div class="card-icon" style="background:${catColors[cat]}">${t.icon}</div>
+          <div class="card-badges">
+            <span class="badge badge-free">FREE</span>
+            ${certBadge}
+          </div>
+        </div>
+        <div>
+          <div class="tool-name">${t.name}</div>
+          <div class="tool-purpose">${t.purpose}</div>
+        </div>
+        <div class="tool-free-tier">🎁 <strong>Free tier:</strong> ${t.freeTier}</div>
+        <div class="card-footer">
+          <div class="module-tag">${moduleStr}</div>
+          <a class="visit-btn" href="${t.url}" target="_blank" rel="noopener">
+            Open
+            <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"/></svg>
+          </a>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  });
+
+  document.getElementById('resultsInfo').textContent =
+    `Showing ${count} tool${count !== 1 ? 's' : ''}${query ? ` for "${query}"` : ''}`;
+}
+
+let activeCat = 'all';
+let searchVal = '';
+
+function filter() {
+  let list = tools;
+  if (activeCat !== 'all') list = list.filter(t => t.cat === activeCat);
+  if (searchVal) {
+    const q = searchVal.toLowerCase();
+    list = list.filter(t =>
+      t.name.toLowerCase().includes(q) ||
+      t.purpose.toLowerCase().includes(q) ||
+      t.modules.some(m => m.toLowerCase().includes(q))
+    );
+  }
+  render(list, searchVal);
+}
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchVal = e.target.value.trim();
+  filter();
+});
+
+document.getElementById('catFilter').addEventListener('click', e => {
+  const btn = e.target.closest('.pill');
+  if (!btn) return;
+  activeCat = btn.dataset.cat;
+  document.querySelectorAll('#catFilter .pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  filter();
+});
+
+render(tools);
+</script>
+</body>
+</html>

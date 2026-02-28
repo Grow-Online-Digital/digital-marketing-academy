@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grow Online Digital — Student Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0d;
+    --paper: #faf8f4;
+    --warm-mid: #f0ebe0;
+    --accent: #d4541a;
+    --accent-light: #f5e9e1;
+    --accent-dark: #a83e11;
+    --muted: #7a746a;
+    --border: #e2ddd5;
+    --gold: #c9a84c;
+    --green: #3a7d5a;
+    --green-light: #eaf3ec;
+    --blue: #1a4fd4;
+    --blue-light: #e8eefb;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .header-nav a {
+    color: rgba(250,248,244,0.6);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    transition: color 0.2s;
+  }
+
+  .header-nav a:hover { color: var(--paper); }
+
+  .student-pill {
+    background: rgba(250,248,244,0.1);
+    border: 1px solid rgba(250,248,244,0.15);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--paper);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 64px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(212,84,26,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: end;
+  }
+
+  .hero-label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(40px, 5vw, 64px);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--paper);
+    margin-bottom: 24px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: rgba(250,248,244,0.5);
+  }
+
+  .hero-desc {
+    color: rgba(250,248,244,0.55);
+    font-size: 17px;
+    line-height: 1.65;
+    max-width: 480px;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(250,248,244,0.1);
+    border: 1px solid rgba(250,248,244,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .stat-cell {
+    background: rgba(250,248,244,0.04);
+    padding: 28px 24px;
+    transition: background 0.2s;
+  }
+
+  .stat-cell:hover { background: rgba(250,248,244,0.07); }
+
+  .stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 42px;
+    font-weight: 600;
+    color: var(--paper);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 6px;
+  }
+
+  .stat-num span { color: var(--accent); }
+
+  .stat-label {
+    font-size: 13px;
+    color: rgba(250,248,244,0.45);
+    font-weight: 400;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-section {
+    background: var(--warm-mid);
+    border-bottom: 1px solid var(--border);
+    padding: 24px 48px;
+  }
+
+  .progress-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .progress-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    white-space: nowrap;
+    min-width: 140px;
+  }
+
+  .progress-bar-wrap {
+    flex: 1;
+    height: 6px;
+    background: var(--border);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--accent);
+    border-radius: 100px;
+    transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .progress-pct {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--accent);
+    min-width: 48px;
+    text-align: right;
+  }
+
+  /* ── MAIN GRID ── */
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .section-meta {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* ── MODULE CARDS ── */
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 56px;
+  }
+
+  .module-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .module-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--border);
+    transition: background 0.2s;
+  }
+
+  .module-card:hover {
+    border-color: #ccc;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    transform: translateY(-1px);
+  }
+
+  .module-card.active::before { background: var(--accent); }
+  .module-card.done::before { background: var(--green); }
+
+  .module-card.active { border-color: rgba(212,84,26,0.3); }
+  .module-card.done { background: var(--green-light); border-color: rgba(58,125,90,0.25); }
+
+  .module-num {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .status-badge {
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-active { background: var(--accent-light); color: var(--accent); }
+  .badge-done { background: var(--green-light); color: var(--green); }
+  .badge-locked { background: var(--warm-mid); color: var(--muted); }
+
+  .module-title {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .module-weeks {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .module-cert {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .cert-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  .cert-dot.earned { background: var(--gold); }
+  .cert-dot.available { background: var(--blue); }
+
+  /* ── TWO COLUMNS ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 56px;
+  }
+
+  /* ── TOOLS WIDGET ── */
+  .widget {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .widget-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .widget-title {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .widget-body { padding: 8px 0; }
+
+  .tool-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 24px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+
+  .tool-row:last-child { border-bottom: none; }
+  .tool-row:hover { background: var(--paper); }
+
+  .tool-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .tool-info { flex: 1; }
+
+  .tool-name {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+
+  .tool-desc {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .tool-link {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+    padding: 4px 12px;
+    border: 1px solid var(--accent-light);
+    border-radius: 100px;
+    transition: all 0.15s;
+  }
+
+  .tool-link:hover {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  /* ── CERTIFICATIONS ── */
+  .cert-grid {
+    padding: 16px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .cert-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .cert-item:hover { border-color: #ccc; background: var(--paper); }
+  .cert-item.complete { border-color: rgba(201,168,76,0.4); background: #fdf9f0; }
+
+  .cert-medal {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+    background: var(--warm-mid);
+  }
+
+  .cert-item.complete .cert-medal { background: rgba(201,168,76,0.15); }
+
+  .cert-info { flex: 1; }
+
+  .cert-name {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+
+  .cert-provider {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .cert-check {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: transparent;
+    transition: all 0.2s;
+  }
+
+  .cert-item.complete .cert-check {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: white;
+  }
+
+  /* ── TIPS BANNER ── */
+  .tips-banner {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 16px;
+    padding: 40px;
+    margin-bottom: 56px;
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px;
+  }
+
+  .tips-banner::before {
+    content: '';
+    position: absolute;
+    bottom: -60%;
+    right: -5%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(212,84,26,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .tip-item {}
+
+  .tip-num {
+    font-family: 'Fraunces', serif;
+    font-size: 48px;
+    font-weight: 300;
+    color: rgba(250,248,244,0.15);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .tip-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .tip-text {
+    font-size: 13px;
+    color: rgba(250,248,244,0.5);
+    line-height: 1.6;
+  }
+
+  /* ── WEEKLY SCHEDULE ── */
+  .schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .schedule-table th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 2px solid var(--border);
+    background: var(--paper);
+  }
+
+  .schedule-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .schedule-table tr:last-child td { border-bottom: none; }
+
+  .schedule-table tr:hover td { background: var(--warm-mid); }
+
+  .week-range {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .focus-tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 500;
+    background: var(--accent-light);
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .focus-tag.green { background: var(--green-light); color: var(--green); }
+  .focus-tag.blue { background: var(--blue-light); color: var(--blue); }
+  .focus-tag.gold { background: #fdf4dd; color: #a07820; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    color: rgba(250,248,244,0.4);
+    padding: 32px 48px;
+    text-align: center;
+    font-size: 13px;
+    margin-top: 48px;
+  }
+
+  footer strong { color: rgba(250,248,244,0.7); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-inner > * {
+    animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .hero-inner > *:nth-child(2) { animation-delay: 0.1s; }
+
+  .module-card {
+    animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .module-card:nth-child(1) { animation-delay: 0.05s; }
+  .module-card:nth-child(2) { animation-delay: 0.1s; }
+  .module-card:nth-child(3) { animation-delay: 0.15s; }
+  .module-card:nth-child(4) { animation-delay: 0.2s; }
+  .module-card:nth-child(5) { animation-delay: 0.25s; }
+  .module-card:nth-child(6) { animation-delay: 0.3s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    header { padding: 0 24px; }
+    .hero { padding: 48px 24px 64px; }
+    .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+    main { padding: 32px 24px; }
+    .modules-grid { grid-template-columns: 1fr 1fr; }
+    .two-col { grid-template-columns: 1fr; }
+    .tips-banner { grid-template-columns: 1fr; padding: 32px 24px; }
+    .progress-section { padding: 20px 24px; }
+  }
+
+  @media (max-width: 600px) {
+    .modules-grid { grid-template-columns: 1fr; }
+    .header-nav { display: none; }
+    .hero-stats { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <span class="logo-dot"></span>
+    Grow Online Digital
+  </div>
+  <nav class="header-nav">
+    <a href="#">Curriculum</a>
+    <a href="#">Tools</a>
+    <a href="#">Resources</a>
+    <a href="#">Progress</a>
+  </nav>
+  <div class="student-pill">Student Portal</div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-label">2025–2026 Cohort · Digital Marketing Academy</div>
+      <h1>Your path from zero to <em>digital marketer</em></h1>
+      <p class="hero-desc">30 weeks. 11 modules. 8+ industry certifications. Everything you need to launch a confident digital marketing career — built for the AI era.</p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-cell">
+        <div class="stat-num">30<span>w</span></div>
+        <div class="stat-label">Programme length</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">8<span>+</span></div>
+        <div class="stat-label">Certifications</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">150<span>h</span></div>
+        <div class="stat-label">Learning hours</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">100<span>%</span></div>
+        <div class="stat-label">Free tools used</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRESS BAR -->
+<section class="progress-section">
+  <div class="progress-inner">
+    <div class="progress-label">Your progress — Week 1</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-pct" id="progressPct">0%</div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<main>
+
+  <!-- MODULE CARDS -->
+  <div class="section-header">
+    <h2 class="section-title">11 Modules</h2>
+    <span class="section-meta">Start Module 1 today</span>
+  </div>
+
+  <div class="modules-grid">
+
+    <div class="module-card active">
+      <div class="module-num">
+        Module 01
+        <span class="status-badge badge-active">In Progress</span>
+      </div>
+      <div class="module-title">Foundations of Digital Marketing & AI</div>
+      <div class="module-weeks">Weeks 1–2 · 8–10 hrs</div>
+      <div class="module-cert">
+        <div class="cert-dot available"></div>
+        Google Digital Garage certification
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">
+        Module 02
+        <span class="status-badge badge-locked">Upcoming</span>
+      </div>
+      <div class="module-title">Website Fundamentals & User Experience</div>
+      <div class="module-weeks">Weeks 3–4 · 6–8 hrs</div>
+      <div class="module-cert">
+        <div class="cert-dot"></div>
+        Practical assessment
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">
+        Module 03
+        <span class="status-badge badge-locked">Upcoming</span>
+      </div>
+      <div class="module-title">SEO & AI Search</div>
+      <div class="module-weeks">Weeks 5–8 · 12–14 hrs</div>
+      <div class="module-cert">
+        <div class="cert-dot available"></div>
+        Semrush SEO Fundamentals
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">
+        Module 04
+        <span class="status-badge badge-locked">Upcoming</span>
+      </div>
+      <div class="module-title">Paid Search & PPC Advertising</div>
+      <div class="module-weeks">Weeks 9–11 · 12–14 hrs</div>
+      <div class="module-cert">
+        <div class="cert-dot available"></div>
+        Google Ads Search Certification
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">
+        Module 05
+        <span class="status-badge badge-locked">Upcoming</span>
+      </div>
+      <div class="module-title">Paid Social Advertising</div>
+      <div class="module-weeks">Weeks 12–14 · 10–12 hrs</div>
+      <div class="module-cert">
+        <div class="cert-dot available"></div>
+        Meta Digital Marketing Associate
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">
+        Module 06
+        <span class="status-badge badge-locked">Upcoming</span>
+      </div>
+      <div class="module-title">Organic Social & Short-Form Video</div>
+      <div class="module-weeks">Weeks 15–16 · 8–10 hrs</div>
+      <div class="module-cert">
+        <div class="cert-dot"></div>
+        HubSpot Social Media
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">
+        Module 07
+        <span class="status-badge badge-locked">Upcoming</span>
+      </div>
+      <div class="module-title">Email Marketing & Automation</div>
+      <div class="module-weeks">Weeks 17–18 · 8–10 hrs</div>
+      <div class="module-cert">
+        <div class="cert-dot available"></div>
+        HubSpot Email Marketing
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">
+        Module 08
+        <span class="status-badge badge-locked">Upcoming</span>
+      </div>
+      <div class="module-title">Content Marketing & AI Content Creation</div>
+      <div class="module-weeks">Weeks 19–20 · 8–10 hrs</div>
+      <div class="module-cert">
+        <div class="cert-dot available"></div>
+        HubSpot Content Marketing
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">
+        Module 09
+        <span class="status-badge badge-locked">Upcoming</span>
+      </div>
+      <div class="module-title">Analytics, Data & Privacy</div>
+      <div class="module-weeks">Weeks 21–23 · 12–14 hrs</div>
+      <div class="module-cert">
+        <div class="cert-dot available"></div>
+        Google Analytics Certification
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">
+        Module 10
+        <span class="status-badge badge-locked">Upcoming</span>
+      </div>
+      <div class="module-title">Digital Marketing Strategy & Career Readiness</div>
+      <div class="module-weeks">Weeks 24–25 · 8–10 hrs</div>
+      <div class="module-cert">
+        <div class="cert-dot available"></div>
+        HubSpot Inbound Marketing
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">
+        Module 11
+        <span class="status-badge badge-locked">Upcoming</span>
+      </div>
+      <div class="module-title">Final Capstone Project</div>
+      <div class="module-weeks">Weeks 26–30 · 30–40 hrs</div>
+      <div class="module-cert">
+        <div class="cert-dot"></div>
+        Course Completion Certificate
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TOOLS + CERTS -->
+  <div class="two-col">
+
+    <!-- AI TOOLS -->
+    <div class="widget">
+      <div class="widget-header">
+        <div class="widget-title">Essential AI Tools</div>
+        <span style="font-size:13px;color:var(--muted)">Set up today</span>
+      </div>
+      <div class="widget-body">
+        <div class="tool-row">
+          <div class="tool-icon" style="background:#f0fdf4">🤖</div>
+          <div class="tool-info">
+            <div class="tool-name">ChatGPT</div>
+            <div class="tool-desc">Content generation & brainstorming</div>
+          </div>
+          <a href="https://chat.openai.com" target="_blank" class="tool-link">Open →</a>
+        </div>
+        <div class="tool-row">
+          <div class="tool-icon" style="background:#fef9ee">✦</div>
+          <div class="tool-info">
+            <div class="tool-name">Claude</div>
+            <div class="tool-desc">Analysis, writing & strategy</div>
+          </div>
+          <a href="https://claude.ai" target="_blank" class="tool-link">Open →</a>
+        </div>
+        <div class="tool-row">
+          <div class="tool-icon" style="background:#f0f4ff">💎</div>
+          <div class="tool-info">
+            <div class="tool-name">Gemini</div>
+            <div class="tool-desc">Google's AI — research & images</div>
+          </div>
+          <a href="https://gemini.google.com" target="_blank" class="tool-link">Open →</a>
+        </div>
+        <div class="tool-row">
+          <div class="tool-icon" style="background:#fff5f0">🎨</div>
+          <div class="tool-info">
+            <div class="tool-name">Canva</div>
+            <div class="tool-desc">AI-powered design & video</div>
+          </div>
+          <a href="https://canva.com" target="_blank" class="tool-link">Open →</a>
+        </div>
+        <div class="tool-row">
+          <div class="tool-icon" style="background:#f5f0ff">📊</div>
+          <div class="tool-info">
+            <div class="tool-name">Google Analytics 4</div>
+            <div class="tool-desc">Website analytics (free)</div>
+          </div>
+          <a href="https://analytics.google.com" target="_blank" class="tool-link">Open →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CERTIFICATIONS -->
+    <div class="widget">
+      <div class="widget-header">
+        <div class="widget-title">Certification Tracker</div>
+        <span style="font-size:13px;color:var(--muted)">0 of 8 earned</span>
+      </div>
+      <div class="cert-grid">
+
+        <div class="cert-item" onclick="toggleCert(this)">
+          <div class="cert-medal">🎓</div>
+          <div class="cert-info">
+            <div class="cert-name">Fundamentals of Digital Marketing</div>
+            <div class="cert-provider">Google Digital Garage</div>
+          </div>
+          <div class="cert-check">✓</div>
+        </div>
+
+        <div class="cert-item" onclick="toggleCert(this)">
+          <div class="cert-medal">🔍</div>
+          <div class="cert-info">
+            <div class="cert-name">SEO Fundamentals</div>
+            <div class="cert-provider">Semrush Academy</div>
+          </div>
+          <div class="cert-check">✓</div>
+        </div>
+
+        <div class="cert-item" onclick="toggleCert(this)">
+          <div class="cert-medal">📢</div>
+          <div class="cert-info">
+            <div class="cert-name">Google Ads Search Certification</div>
+            <div class="cert-provider">Google Skillshop</div>
+          </div>
+          <div class="cert-check">✓</div>
+        </div>
+
+        <div class="cert-item" onclick="toggleCert(this)">
+          <div class="cert-medal">📱</div>
+          <div class="cert-info">
+            <div class="cert-name">Social Media Marketing</div>
+            <div class="cert-provider">HubSpot Academy</div>
+          </div>
+          <div class="cert-check">✓</div>
+        </div>
+
+        <div class="cert-item" onclick="toggleCert(this)">
+          <div class="cert-medal">✉️</div>
+          <div class="cert-info">
+            <div class="cert-name">Email Marketing Certification</div>
+            <div class="cert-provider">HubSpot Academy</div>
+          </div>
+          <div class="cert-check">✓</div>
+        </div>
+
+        <div class="cert-item" onclick="toggleCert(this)">
+          <div class="cert-medal">📝</div>
+          <div class="cert-info">
+            <div class="cert-name">Content Marketing Certification</div>
+            <div class="cert-provider">HubSpot Academy</div>
+          </div>
+          <div class="cert-check">✓</div>
+        </div>
+
+        <div class="cert-item" onclick="toggleCert(this)">
+          <div class="cert-medal">📈</div>
+          <div class="cert-info">
+            <div class="cert-name">Google Analytics Certification</div>
+            <div class="cert-provider">Google Skillshop</div>
+          </div>
+          <div class="cert-check">✓</div>
+        </div>
+
+        <div class="cert-item" onclick="toggleCert(this)">
+          <div class="cert-medal">🎯</div>
+          <div class="cert-info">
+            <div class="cert-name">Inbound Marketing Certification</div>
+            <div class="cert-provider">HubSpot Academy</div>
+          </div>
+          <div class="cert-check">✓</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TIPS BANNER -->
+  <div class="tips-banner">
+    <div class="tip-item">
+      <div class="tip-num">01</div>
+      <div class="tip-title">Set a schedule</div>
+      <div class="tip-text">Block 4–6 hours per week and treat it like a class. Consistency beats intensity every time. Even 45 minutes a day compounds fast.</div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-num">02</div>
+      <div class="tip-title">Use AI as your study partner</div>
+      <div class="tip-text">Ask ChatGPT or Claude to explain any concept you don't understand. That's not cheating — that's exactly how modern marketers work.</div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-num">03</div>
+      <div class="tip-title">Don't skip certifications</div>
+      <div class="tip-text">Every certificate goes on your CV and LinkedIn. 72% of hiring managers now consider digital certificates valuable. Earn them as you go.</div>
+    </div>
+  </div>
+
+  <!-- WEEKLY SCHEDULE -->
+  <div class="section-header">
+    <h2 class="section-title">30-Week Schedule at a Glance</h2>
+    <span class="section-meta">4–6 hours/week</span>
+  </div>
+
+  <div class="widget" style="margin-bottom:56px">
+    <table class="schedule-table">
+      <thead>
+        <tr>
+          <th style="width:120px">Weeks</th>
+          <th style="width:180px">Module</th>
+          <th>Focus Areas</th>
+          <th style="width:180px">Certification</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="week-range">1–2</span></td>
+          <td>M1: Foundations & AI</td>
+          <td><span class="focus-tag">Digital marketing overview</span> <span class="focus-tag">AI tools setup</span> <span class="focus-tag">Buyer personas</span></td>
+          <td>Google Digital Garage</td>
+        </tr>
+        <tr>
+          <td><span class="week-range">3–4</span></td>
+          <td>M2: Website & UX</td>
+          <td><span class="focus-tag blue">Landing pages</span> <span class="focus-tag blue">GTM</span> <span class="focus-tag blue">Core Web Vitals</span></td>
+          <td>Practical assessment</td>
+        </tr>
+        <tr>
+          <td><span class="week-range">5–8</span></td>
+          <td>M3: SEO & AI Search</td>
+          <td><span class="focus-tag green">Keyword research</span> <span class="focus-tag green">On-page SEO</span> <span class="focus-tag green">GEO</span></td>
+          <td>Semrush SEO Fundamentals</td>
+        </tr>
+        <tr>
+          <td><span class="week-range">9–11</span></td>
+          <td>M4: PPC / Google Ads</td>
+          <td><span class="focus-tag">Campaign setup</span> <span class="focus-tag">Ad copy</span> <span class="focus-tag">AI Max</span></td>
+          <td>Google Ads Search</td>
+        </tr>
+        <tr>
+          <td><span class="week-range">12–14</span></td>
+          <td>M5: Paid Social</td>
+          <td><span class="focus-tag blue">Meta Ads</span> <span class="focus-tag blue">Advantage+</span> <span class="focus-tag blue">TikTok</span></td>
+          <td>Meta / HubSpot Social</td>
+        </tr>
+        <tr>
+          <td><span class="week-range">15–16</span></td>
+          <td>M6: Organic Social & Video</td>
+          <td><span class="focus-tag green">Content strategy</span> <span class="focus-tag green">Short-form video</span></td>
+          <td>Included in M5</td>
+        </tr>
+        <tr>
+          <td><span class="week-range">17–18</span></td>
+          <td>M7: Email Marketing</td>
+          <td><span class="focus-tag">List building</span> <span class="focus-tag">Automation</span> <span class="focus-tag">GDPR</span></td>
+          <td>HubSpot Email</td>
+        </tr>
+        <tr>
+          <td><span class="week-range">19–20</span></td>
+          <td>M8: Content Marketing</td>
+          <td><span class="focus-tag blue">AI content creation</span> <span class="focus-tag blue">Blogging</span> <span class="focus-tag blue">Repurposing</span></td>
+          <td>HubSpot Content</td>
+        </tr>
+        <tr>
+          <td><span class="week-range">21–23</span></td>
+          <td>M9: Analytics & Privacy</td>
+          <td><span class="focus-tag green">GA4</span> <span class="focus-tag green">Looker Studio</span> <span class="focus-tag green">Attribution</span></td>
+          <td>Google Analytics</td>
+        </tr>
+        <tr>
+          <td><span class="week-range">24–25</span></td>
+          <td>M10: Strategy & Careers</td>
+          <td><span class="focus-tag">Full strategy</span> <span class="focus-tag">CV & LinkedIn</span></td>
+          <td>HubSpot Inbound</td>
+        </tr>
+        <tr>
+          <td><span class="week-range">26–30</span></td>
+          <td>M11: Capstone Project</td>
+          <td><span class="focus-tag gold">Real campaign build</span> <span class="focus-tag gold">Pitch deck</span> <span class="focus-tag gold">Portfolio</span></td>
+          <td>Course Completion</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<footer>
+  <strong>Grow Online Digital Marketing Academy</strong> · Created by PKB · 2025–2026 Edition<br>
+  <span style="margin-top:8px;display:block">All tools in this course are free. You do not need to purchase any software.</span>
+</footer>
+
+<script>
+  // Animate progress bar on load
+  setTimeout(() => {
+    const fill = document.getElementById('progressFill');
+    const pct = document.getElementById('progressPct');
+    const target = 3; // Week 1 of 30
+    fill.style.width = target + '%';
+    pct.textContent = target + '%';
+  }, 400);
+
+  // Toggle certification completion
+  function toggleCert(el) {
+    el.classList.toggle('complete');
+    // Update counter
+    const total = document.querySelectorAll('.cert-item').length;
+    const done = document.querySelectorAll('.cert-item.complete').length;
+    document.querySelector('.widget-header span[style]') || 
+    document.querySelectorAll('.widget-header span')[1].textContent = done + ' of ' + total + ' earned';
+    
+    // Find the counter span in the cert widget header
+    const headers = document.querySelectorAll('.widget-header');
+    for (const h of headers) {
+      if (h.querySelector('.widget-title')?.textContent.includes('Certification')) {
+        h.querySelector('span:last-child').textContent = done + ' of ' + total + ' earned';
+      }
+    }
+  }
+</script>
+
+</body>
+</html>

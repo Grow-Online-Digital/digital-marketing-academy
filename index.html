@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grow Online Digital — Marketing Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:     #1a1814;
+    --cream:   #f5f2ea;
+    --warm:    #ede9df;
+    --gold:    #c4963a;
+    --coral:   #d95f3b;
+    --teal:    #2a7d6f;
+    --slate:   #4a4640;
+    --muted:   #8a8479;
+    --rule:    rgba(26,24,20,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  /* ─── MASTHEAD ─── */
+  .masthead {
+    border-bottom: 1px solid var(--rule);
+    padding: 18px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: var(--cream);
+    z-index: 100;
+  }
+  .masthead-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .masthead-logo span { color: var(--coral); }
+  .masthead-nav { display: flex; gap: 32px; list-style: none; }
+  .masthead-nav a {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--slate);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .masthead-nav a:hover { color: var(--coral); }
+
+  /* ─── HERO ─── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 88vh;
+    border-bottom: 1px solid var(--rule);
+  }
+  .hero-left {
+    padding: 80px 64px 80px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid var(--rule);
+  }
+  .hero-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 2px;
+    background: var(--coral);
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--coral);
+  }
+  .hero-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--muted);
+    margin-bottom: 40px;
+    line-height: 1.4;
+  }
+  .hero-desc {
+    font-size: 1rem;
+    color: var(--slate);
+    max-width: 420px;
+    margin-bottom: 48px;
+    line-height: 1.75;
+  }
+  .hero-cta-group { display: flex; gap: 16px; align-items: center; }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 14px 32px;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { background: var(--coral); transform: translateY(-1px); }
+  .btn-ghost {
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 500;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .btn-ghost:hover { color: var(--coral); border-color: var(--coral); }
+
+  .hero-right {
+    background: var(--ink);
+    padding: 80px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: var(--coral);
+    opacity: 0.12;
+  }
+  .hero-right::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -60px;
+    width: 240px; height: 240px;
+    border-radius: 50%;
+    background: var(--teal);
+    opacity: 0.15;
+  }
+  .hero-stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-stat {
+    background: rgba(255,255,255,0.05);
+    padding: 32px 28px;
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: background 0.2s;
+  }
+  .hero-stat:hover { background: rgba(255,255,255,0.09); }
+  .hero-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.6rem;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .hero-stat-num span { color: var(--gold); }
+  .hero-stat-label {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .hero-quote {
+    margin-top: 36px;
+    border-left: 3px solid var(--coral);
+    padding-left: 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-quote p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: rgba(255,255,255,0.75);
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+  .hero-quote cite {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.78rem;
+    color: var(--gold);
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ─── TICKER ─── */
+  .ticker-wrap {
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    background: var(--warm);
+    overflow: hidden;
+    padding: 12px 0;
+    display: flex;
+  }
+  .ticker {
+    display: flex;
+    gap: 0;
+    white-space: nowrap;
+    animation: ticker 28s linear infinite;
+  }
+  .ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 24px;
+    padding: 0 32px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--slate);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .ticker-dot { color: var(--coral); font-size: 1.2rem; }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ─── SECTION SHARED ─── */
+  section { padding: 100px 48px; }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    margin-bottom: 64px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .section-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  /* ─── MODULES GRID ─── */
+  .modules-section { border-bottom: 1px solid var(--rule); }
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .module-card {
+    padding: 36px 32px;
+    border: 1px solid var(--rule);
+    background: var(--cream);
+    transition: background 0.2s, transform 0.15s;
+    position: relative;
+  }
+  .module-card:hover { background: var(--warm); transform: translateY(-2px); }
+  .module-card.featured {
+    background: var(--ink);
+    color: var(--cream);
+    grid-column: span 2;
+  }
+  .module-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+  }
+  .module-card.featured .module-num { color: rgba(255,255,255,0.45); }
+  .module-icon {
+    font-size: 1.6rem;
+    margin-bottom: 16px;
+  }
+  .module-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    line-height: 1.25;
+  }
+  .module-desc {
+    font-size: 0.87rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+  .module-card.featured .module-desc { color: rgba(255,255,255,0.55); }
+  .module-meta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .meta-chip {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--teal);
+    border: 1px solid var(--teal);
+    padding: 3px 10px;
+    border-radius: 2px;
+  }
+  .module-card.featured .meta-chip {
+    color: var(--gold);
+    border-color: var(--gold);
+  }
+  .weeks-chip {
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .module-card.featured .weeks-chip { color: rgba(255,255,255,0.4); }
+
+  /* ─── TOOLS ROW ─── */
+  .tools-section { background: var(--warm); border-bottom: 1px solid var(--rule); }
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+  .tool-card {
+    background: var(--cream);
+    padding: 32px 28px;
+    border: 1px solid var(--rule);
+    transition: background 0.2s;
+  }
+  .tool-card:hover { background: #fff; }
+  .tool-icon { font-size: 1.8rem; margin-bottom: 16px; }
+  .tool-category {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 8px;
+  }
+  .tool-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .tool-desc { font-size: 0.84rem; color: var(--slate); line-height: 1.6; }
+
+  /* ─── TIMELINE ─── */
+  .timeline-section { border-bottom: 1px solid var(--rule); }
+  .timeline {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 0;
+  }
+  .timeline-row {
+    display: contents;
+  }
+  .timeline-week {
+    padding: 24px 32px 24px 0;
+    border-right: 2px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-align: right;
+    vertical-align: top;
+  }
+  .timeline-content {
+    padding: 24px 0 24px 32px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .timeline-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--muted);
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .timeline-dot.active { background: var(--coral); }
+  .timeline-dot.cert { background: var(--gold); }
+  .timeline-info {}
+  .timeline-module {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 3px;
+  }
+  .timeline-detail { font-size: 0.84rem; color: var(--muted); }
+  .timeline-badge {
+    margin-left: auto;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .badge-cert { background: rgba(196,150,58,0.15); color: var(--gold); }
+  .badge-cap  { background: rgba(42,125,111,0.12); color: var(--teal); }
+
+  /* ─── CHECKLIST ─── */
+  .checklist-section {
+    background: var(--ink);
+    color: var(--cream);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .checklist-section .section-title { color: #fff; }
+  .checklist-section .section-number { color: rgba(255,255,255,0.3); }
+  .checklist-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+  .checklist-group {}
+  .checklist-group-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+  .checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .check-box {
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    border-radius: 3px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .check-box:hover { border-color: var(--coral); }
+  .check-box.checked { background: var(--coral); border-color: var(--coral); }
+  .check-box.checked::after { content: '✓'; font-size: 0.7rem; color: #fff; font-weight: 700; }
+  .check-label { font-size: 0.9rem; color: rgba(255,255,255,0.8); }
+  .check-url {
+    margin-left: auto;
+    font-size: 0.72rem;
+    color: var(--teal);
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+    white-space: nowrap;
+  }
+  .check-url:hover { color: var(--gold); }
+
+  /* ─── FOOTER ─── */
+  .site-footer {
+    border-top: 1px solid var(--rule);
+    padding: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .footer-brand span { color: var(--coral); }
+  .footer-trainer {
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  .footer-trainer strong { color: var(--ink); }
+  .footer-edition {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+
+  /* ─── REVEAL ANIMATION ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { min-height: 400px; }
+    .modules-grid { grid-template-columns: 1fr; }
+    .module-card.featured { grid-column: span 1; }
+    .tools-grid { grid-template-columns: 1fr 1fr; }
+    .checklist-grid { grid-template-columns: 1fr; }
+    section { padding: 64px 24px; }
+    .masthead { padding: 16px 24px; }
+    .masthead-nav { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <a href="#" class="masthead-logo">Grow Online Digital<span>.</span></a>
+  <nav>
+    <ul class="masthead-nav">
+      <li><a href="#modules">Curriculum</a></li>
+      <li><a href="#tools">Tools</a></li>
+      <li><a href="#timeline">Schedule</a></li>
+      <li><a href="#start">Get Started</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">2025–2026 Edition · AI-Integrated</p>
+    <h1 class="hero-title">From Zero to<br><em>Digital Marketer</em></h1>
+    <p class="hero-subtitle">A 30-week programme built for the AI era.</p>
+    <p class="hero-desc">
+      Master every major digital marketing channel — SEO, paid ads, social, email,
+      and analytics — while learning to use AI as a professional marketing tool.
+      No prior experience required.
+    </p>
+    <div class="hero-cta-group">
+      <a href="#start" class="btn-primary">Begin Module 1 →</a>
+      <a href="#modules" class="btn-ghost">View curriculum</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-stat-grid">
+      <div class="hero-stat">
+        <div class="hero-stat-num">30<span>wk</span></div>
+        <div class="hero-stat-label">Full Programme</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">8<span>+</span></div>
+        <div class="hero-stat-label">Certifications</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">150<span>hr</span></div>
+        <div class="hero-stat-label">Learning Content</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">£<span>0</span></div>
+        <div class="hero-stat-label">Tools Required</div>
+      </div>
+    </div>
+    <div class="hero-quote">
+      <p>"AI proficiency in marketing now commands 20–30% higher salaries — and Gartner predicts traditional search will drop 25% by 2026. This course prepares you for what's already here."</p>
+      <cite>PKB · Grow Online Digital</cite>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker">
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Google Ads Certification</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> SEO & AI Search</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Meta Ads Manager</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Email Automation</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Google Analytics 4</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Prompt Engineering</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Content Strategy</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Looker Studio Dashboards</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Performance Max</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> HubSpot Certifications</span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Google Ads Certification</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> SEO & AI Search</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Meta Ads Manager</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Email Automation</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Google Analytics 4</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Prompt Engineering</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Content Strategy</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Looker Studio Dashboards</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Performance Max</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> HubSpot Certifications</span>
+  </div>
+</div>
+
+<!-- MODULES -->
+<section class="modules-section reveal" id="modules">
+  <div class="section-header">
+    <span class="section-number">01 / CURRICULUM</span>
+    <h2 class="section-title">11 Modules.<br>Every Channel.</h2>
+  </div>
+  <div class="modules-grid">
+
+    <div class="module-card featured">
+      <div class="module-num">M01</div>
+      <div class="module-icon">🧭</div>
+      <div class="module-name">Foundations of Digital Marketing & AI</div>
+      <div class="module-desc">Start here. Understand the full digital marketing ecosystem, set up your AI toolkit, and learn to think like a modern marketer. Covers ChatGPT, Claude, Gemini, prompt engineering, buyer personas, and marketing funnels.</div>
+      <div class="module-meta">
+        <span class="meta-chip">Google Certification</span>
+        <span class="weeks-chip">📅 Weeks 1–2</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">M02</div>
+      <div class="module-icon">🖥️</div>
+      <div class="module-name">Website Fundamentals & UX</div>
+      <div class="module-desc">How websites work as marketing assets. UX principles, landing page best practices, Core Web Vitals, and using AI to audit websites.</div>
+      <div class="module-meta">
+        <span class="weeks-chip">📅 Weeks 3–4</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">M03</div>
+      <div class="module-icon">🔍</div>
+      <div class="module-name">SEO & AI Search</div>
+      <div class="module-desc">Traditional SEO meets GEO. Keyword research, on-page optimisation, technical SEO, and how to appear in Google AI Overviews, ChatGPT Search, and Perplexity.</div>
+      <div class="module-meta">
+        <span class="meta-chip">Semrush Cert</span>
+        <span class="weeks-chip">📅 Weeks 5–8</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">M04</div>
+      <div class="module-icon">🎯</div>
+      <div class="module-name">Paid Search & Google Ads</div>
+      <div class="module-desc">PPC fundamentals, campaign structure, RSA copywriting, AI Max for Search, and Performance Max campaigns.</div>
+      <div class="module-meta">
+        <span class="meta-chip">Google Ads Cert</span>
+        <span class="weeks-chip">📅 Weeks 9–11</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">M05</div>
+      <div class="module-icon">📱</div>
+      <div class="module-name">Paid Social Advertising</div>
+      <div class="module-desc">Meta Ads Manager, Advantage+ campaigns, TikTok Ads, LinkedIn Ads, retargeting strategies, and AI creative generation.</div>
+      <div class="module-meta">
+        <span class="meta-chip">Meta / HubSpot</span>
+        <span class="weeks-chip">📅 Weeks 12–14</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">M06</div>
+      <div class="module-icon">🎬</div>
+      <div class="module-name">Organic Social & Short-Form Video</div>
+      <div class="module-desc">Content pillars, editorial calendars, TikTok/Reels/Shorts production, community management, and influencer strategy.</div>
+      <div class="module-meta">
+        <span class="weeks-chip">📅 Weeks 15–16</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">M07</div>
+      <div class="module-icon">✉️</div>
+      <div class="module-name">Email Marketing & Automation</div>
+      <div class="module-desc">List building, segmentation, welcome sequences, automation workflows, deliverability, GDPR compliance, and AI personalisation.</div>
+      <div class="module-meta">
+        <span class="meta-chip">HubSpot Cert</span>
+        <span class="weeks-chip">📅 Weeks 17–18</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">M08</div>
+      <div class="module-icon">✍️</div>
+      <div class="module-name">Content Marketing & AI Creation</div>
+      <div class="module-desc">Content strategy, blogging, the PESO model, repurposing workflows, storytelling frameworks, and ethical AI content creation.</div>
+      <div class="module-meta">
+        <span class="meta-chip">HubSpot Cert</span>
+        <span class="weeks-chip">📅 Weeks 19–20</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">M09</div>
+      <div class="module-icon">📊</div>
+      <div class="module-name">Analytics, Data & Privacy</div>
+      <div class="module-desc">GA4 setup and reporting, Looker Studio dashboards, attribution models, UTM tracking, GDPR/UK GDPR compliance, and data storytelling.</div>
+      <div class="module-meta">
+        <span class="meta-chip">GA4 Cert</span>
+        <span class="weeks-chip">📅 Weeks 21–23</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">M10</div>
+      <div class="module-icon">🗺️</div>
+      <div class="module-name">Strategy & Career Readiness</div>
+      <div class="module-desc">Integrated strategies, budget allocation, career paths, freelancing, CV optimisation, LinkedIn profile, and interview preparation.</div>
+      <div class="module-meta">
+        <span class="meta-chip">HubSpot Inbound</span>
+        <span class="weeks-chip">📅 Weeks 24–25</span>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-num">M11</div>
+      <div class="module-icon">🚀</div>
+      <div class="module-name">Capstone Project</div>
+      <div class="module-desc">Build a complete digital marketing strategy for a real or simulated client — all channels, assets, KPI framework, and a professional pitch deck. Your portfolio centrepiece.</div>
+      <div class="module-meta">
+        <span class="meta-chip">Completion Cert</span>
+        <span class="weeks-chip">📅 Weeks 26–30</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section class="tools-section reveal" id="tools">
+  <div class="section-header">
+    <span class="section-number">02 / TOOLS</span>
+    <h2 class="section-title">Everything Free.<br>Professional Grade.</h2>
+  </div>
+  <div class="tools-grid">
+    <div class="tool-card">
+      <div class="tool-icon">🤖</div>
+      <div class="tool-category">AI Assistants</div>
+      <div class="tool-name">ChatGPT · Claude · Gemini</div>
+      <div class="tool-desc">Your creative co-pilots for content, research, strategy, and analysis. All free tiers available.</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">🔎</div>
+      <div class="tool-category">SEO</div>
+      <div class="tool-name">Search Console · Ahrefs · Semrush</div>
+      <div class="tool-desc">Keyword research, rank tracking, site audits, and backlink analysis — all within free limits.</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">📣</div>
+      <div class="tool-category">Paid Advertising</div>
+      <div class="tool-name">Google Ads · Meta Ads · TikTok</div>
+      <div class="tool-desc">The major ad platforms. Free to set up — you only pay for the ads you choose to run.</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">📩</div>
+      <div class="tool-category">Email Marketing</div>
+      <div class="tool-name">MailerLite · Brevo · Mailchimp</div>
+      <div class="tool-desc">Send campaigns and build automations. MailerLite's free tier offers 12,000 emails/month.</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">📐</div>
+      <div class="tool-category">Design</div>
+      <div class="tool-name">Canva · CapCut</div>
+      <div class="tool-desc">Professional-grade visual design and video editing. No experience required.</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">📈</div>
+      <div class="tool-category">Analytics</div>
+      <div class="tool-name">GA4 · Looker Studio · GTM</div>
+      <div class="tool-desc">Industry-standard analytics and reporting. Google's entire analytics stack is completely free.</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">📱</div>
+      <div class="tool-category">Social Media</div>
+      <div class="tool-name">Buffer · Later · Meta Suite</div>
+      <div class="tool-desc">Schedule, publish, and analyse organic social across all major platforms.</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">🌐</div>
+      <div class="tool-category">Web & Landing Pages</div>
+      <div class="tool-name">WordPress · Carrd · Wix</div>
+      <div class="tool-desc">Build real websites and landing pages to practise your UX and conversion skills.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="timeline-section reveal" id="timeline">
+  <div class="section-header">
+    <span class="section-number">03 / SCHEDULE</span>
+    <h2 class="section-title">30 Weeks.<br>Your Roadmap.</h2>
+  </div>
+  <div class="timeline">
+    <div class="timeline-week">Wk 1–2</div>
+    <div class="timeline-content">
+      <div class="timeline-dot active"></div>
+      <div class="timeline-info">
+        <div class="timeline-module">M1: Foundations & AI</div>
+        <div class="timeline-detail">Digital marketing overview · AI toolkit setup · Buyer personas · Prompt engineering</div>
+      </div>
+      <span class="timeline-badge badge-cert">Google Cert</span>
+    </div>
+
+    <div class="timeline-week">Wk 3–4</div>
+    <div class="timeline-content">
+      <div class="timeline-dot"></div>
+      <div class="timeline-info">
+        <div class="timeline-module">M2: Website & UX</div>
+        <div class="timeline-detail">CMS platforms · Landing pages · Core Web Vitals · Google Tag Manager</div>
+      </div>
+    </div>
+
+    <div class="timeline-week">Wk 5–8</div>
+    <div class="timeline-content">
+      <div class="timeline-dot cert"></div>
+      <div class="timeline-info">
+        <div class="timeline-module">M3: SEO & AI Search</div>
+        <div class="timeline-detail">Keyword research · On-page SEO · GEO · Local SEO · Semrush tools</div>
+      </div>
+      <span class="timeline-badge badge-cert">Semrush Cert</span>
+    </div>
+
+    <div class="timeline-week">Wk 9–11</div>
+    <div class="timeline-content">
+      <div class="timeline-dot cert"></div>
+      <div class="timeline-info">
+        <div class="timeline-module">M4: Google Ads & PPC</div>
+        <div class="timeline-detail">Search campaigns · RSA copywriting · AI Max · Performance Max · Bidding</div>
+      </div>
+      <span class="timeline-badge badge-cert">Google Ads Cert</span>
+    </div>
+
+    <div class="timeline-week">Wk 12–14</div>
+    <div class="timeline-content">
+      <div class="timeline-dot cert"></div>
+      <div class="timeline-info">
+        <div class="timeline-module">M5: Paid Social</div>
+        <div class="timeline-detail">Meta Ads · Advantage+ · TikTok · LinkedIn · Retargeting · Creative AI</div>
+      </div>
+      <span class="timeline-badge badge-cert">Meta / HubSpot</span>
+    </div>
+
+    <div class="timeline-week">Wk 15–16</div>
+    <div class="timeline-content">
+      <div class="timeline-dot"></div>
+      <div class="timeline-info">
+        <div class="timeline-module">M6: Organic Social & Video</div>
+        <div class="timeline-detail">Platform strategy · Content calendar · Short-form video scripts · Community management</div>
+      </div>
+    </div>
+
+    <div class="timeline-week">Wk 17–18</div>
+    <div class="timeline-content">
+      <div class="timeline-dot cert"></div>
+      <div class="timeline-info">
+        <div class="timeline-module">M7: Email Marketing</div>
+        <div class="timeline-detail">List building · Automation workflows · Deliverability · GDPR · AI personalisation</div>
+      </div>
+      <span class="timeline-badge badge-cert">HubSpot Cert</span>
+    </div>
+
+    <div class="timeline-week">Wk 19–20</div>
+    <div class="timeline-content">
+      <div class="timeline-dot cert"></div>
+      <div class="timeline-info">
+        <div class="timeline-module">M8: Content Marketing</div>
+        <div class="timeline-detail">Editorial calendar · AI content creation ethics · PESO model · Repurposing</div>
+      </div>
+      <span class="timeline-badge badge-cert">HubSpot Cert</span>
+    </div>
+
+    <div class="timeline-week">Wk 21–23</div>
+    <div class="timeline-content">
+      <div class="timeline-dot cert"></div>
+      <div class="timeline-info">
+        <div class="timeline-module">M9: Analytics & Privacy</div>
+        <div class="timeline-detail">GA4 · Looker Studio · Attribution · UTM tracking · UK GDPR compliance</div>
+      </div>
+      <span class="timeline-badge badge-cert">GA4 Cert</span>
+    </div>
+
+    <div class="timeline-week">Wk 24–25</div>
+    <div class="timeline-content">
+      <div class="timeline-dot cert"></div>
+      <div class="timeline-info">
+        <div class="timeline-module">M10: Strategy & Career</div>
+        <div class="timeline-detail">Integrated strategy · Budget planning · CV · LinkedIn · Interview prep</div>
+      </div>
+      <span class="timeline-badge badge-cert">HubSpot Inbound</span>
+    </div>
+
+    <div class="timeline-week">Wk 26–30</div>
+    <div class="timeline-content">
+      <div class="timeline-dot active"></div>
+      <div class="timeline-info">
+        <div class="timeline-module">M11: Capstone Project</div>
+        <div class="timeline-detail">Full strategy · Campaign assets · KPI dashboard · Pitch deck · Portfolio complete</div>
+      </div>
+      <span class="timeline-badge badge-cap">Completion Cert</span>
+    </div>
+  </div>
+</section>
+
+<!-- CHECKLIST -->
+<section class="checklist-section reveal" id="start">
+  <div class="section-header">
+    <span class="section-number">04 / GET STARTED</span>
+    <h2 class="section-title" style="color:#fff">Do These Today.</h2>
+  </div>
+  <div class="checklist-grid">
+    <div class="checklist-group">
+      <div class="checklist-group-title">Step 1 · AI Accounts (All Free)</div>
+      <div class="checklist-item">
+        <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+        <span class="check-label">ChatGPT — Content, research, brainstorming</span>
+        <a href="https://chat.openai.com" class="check-url" target="_blank">Set up →</a>
+      </div>
+      <div class="checklist-item">
+        <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+        <span class="check-label">Claude — Analysis, writing, strategy</span>
+        <a href="https://claude.ai" class="check-url" target="_blank">Set up →</a>
+      </div>
+      <div class="checklist-item">
+        <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+        <span class="check-label">Gemini — Google's AI assistant</span>
+        <a href="https://gemini.google.com" class="check-url" target="_blank">Set up →</a>
+      </div>
+      <div class="checklist-item">
+        <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+        <span class="check-label">Canva — AI-powered design tool</span>
+        <a href="https://www.canva.com" class="check-url" target="_blank">Set up →</a>
+      </div>
+    </div>
+    <div class="checklist-group">
+      <div class="checklist-group-title">Step 2 · Marketing Accounts (All Free)</div>
+      <div class="checklist-item">
+        <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+        <span class="check-label">Google Account — Analytics, Ads, Search Console</span>
+        <a href="https://accounts.google.com" class="check-url" target="_blank">Set up →</a>
+      </div>
+      <div class="checklist-item">
+        <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+        <span class="check-label">HubSpot Academy — Certifications hub</span>
+        <a href="https://academy.hubspot.com" class="check-url" target="_blank">Set up →</a>
+      </div>
+      <div class="checklist-item">
+        <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+        <span class="check-label">Semrush — SEO & PPC tools</span>
+        <a href="https://www.semrush.com" class="check-url" target="_blank">Set up →</a>
+      </div>
+      <div class="checklist-item">
+        <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+        <span class="check-label">Start Module 1 — Google Digital Garage</span>
+        <a href="https://learndigital.withgoogle.com/digitalgarage" class="check-url" target="_blank">Start →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-brand">Grow Online Digital<span>.</span></div>
+  <div class="footer-trainer">
+    Designed & delivered by <strong>PKB</strong><br>
+    Digital Marketing Trainer · Grow Online Digital
+  </div>
+  <div class="footer-edition">2025–2026 Edition</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.07 });
+  reveals.forEach(el => io.observe(el));
+</script>
+</body>
+</html>

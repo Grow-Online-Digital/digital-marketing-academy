@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Progress Tracker — Grow Online Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0d;
+    --paper: #faf8f4;
+    --warm: #f0ebe0;
+    --accent: #d4541a;
+    --accent-light: #f9ede5;
+    --muted: #7a746a;
+    --border: #e2ddd5;
+    --green: #2d6a4f;
+    --green-bg: #eaf4ef;
+    --gold: #b8892e;
+    --gold-bg: #fdf5e0;
+    --blue: #2a4dd4;
+    --blue-bg: #eaeffd;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--warm);
+    min-height: 100vh;
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* PAGE HEADER */
+  .page-header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 40px 48px;
+  }
+
+  .page-header-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .breadcrumb {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(250,248,244,0.4);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .breadcrumb span { color: rgba(250,248,244,0.6); }
+
+  .page-header h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 40px;
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+
+  .page-header h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .page-header p {
+    color: rgba(250,248,244,0.5);
+    font-size: 15px;
+  }
+
+  /* LAYOUT */
+  .layout {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 48px;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    position: sticky;
+    top: 24px;
+  }
+
+  .sidebar-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .sidebar-card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* OVERALL PROGRESS */
+  .overall-ring {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 28px 20px;
+    gap: 16px;
+  }
+
+  .ring-wrap {
+    position: relative;
+    width: 120px;
+    height: 120px;
+  }
+
+  .ring-wrap svg {
+    transform: rotate(-90deg);
+  }
+
+  .ring-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ring-pct {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .ring-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .ring-details {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+  }
+
+  .detail-row .key { color: var(--muted); }
+  .detail-row .val { font-weight: 600; }
+
+  /* MODULE NAV */
+  .module-nav { padding: 8px 0; }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-size: 13px;
+  }
+
+  .nav-item:hover { background: var(--paper); }
+  .nav-item.active { background: var(--accent-light); }
+
+  .nav-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    width: 20px;
+    flex-shrink: 0;
+  }
+
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .nav-item.done .nav-dot { background: var(--green); border-color: var(--green); }
+  .nav-item.active .nav-dot { background: var(--accent); border-color: var(--accent); }
+
+  .nav-title {
+    flex: 1;
+    font-weight: 400;
+    color: var(--muted);
+    line-height: 1.3;
+    font-size: 12px;
+  }
+
+  .nav-item.active .nav-title { color: var(--accent); font-weight: 500; }
+  .nav-item.done .nav-title { color: var(--green); }
+
+  /* MAIN PANEL */
+  .main-panel {}
+
+  .module-panel {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .module-panel-header {
+    padding: 28px 32px;
+    border-bottom: 2px solid var(--warm);
+    position: relative;
+  }
+
+  .module-panel-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--accent);
+  }
+
+  .m-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .m-title {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+
+  .m-meta {
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    gap: 16px;
+  }
+
+  .m-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* TASKS */
+  .tasks-section { padding: 24px 32px; border-bottom: 1px solid var(--border); }
+
+  .tasks-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .tasks-header h3 {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .tasks-pct {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .task-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 100px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .task-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 100px;
+    transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .task-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .task-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .task-item:hover { border-color: #ccc; background: var(--paper); }
+  .task-item.done { background: var(--green-bg); border-color: rgba(45,106,79,0.25); }
+
+  .task-checkbox {
+    width: 20px; height: 20px;
+    border-radius: 6px;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    font-size: 11px;
+    color: transparent;
+    background: white;
+  }
+
+  .task-item.done .task-checkbox {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+  }
+
+  .task-text {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .task-item.done .task-text {
+    color: var(--green);
+    text-decoration: line-through;
+    opacity: 0.7;
+  }
+
+  .task-tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 100px;
+    background: var(--warm);
+    color: var(--muted);
+  }
+
+  /* CERTIFICATION ROW */
+  .cert-section { padding: 24px 32px; border-bottom: 1px solid var(--border); }
+
+  .cert-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .cert-row:hover { border-color: #ccc; background: var(--paper); }
+  .cert-row.earned { background: var(--gold-bg); border-color: rgba(184,137,46,0.35); }
+
+  .cert-icon {
+    font-size: 24px;
+    width: 44px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .cert-row-info { flex: 1; }
+
+  .cert-row-name {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+
+  .cert-row-sub {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .cert-earn-btn {
+    padding: 8px 20px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: none;
+  }
+
+  .cert-earn-btn.to-earn {
+    background: var(--accent);
+    color: white;
+  }
+
+  .cert-earn-btn.to-earn:hover { background: var(--accent); opacity: 0.85; }
+
+  .cert-earn-btn.earned-state {
+    background: var(--gold-bg);
+    color: var(--gold);
+    border: 1px solid rgba(184,137,46,0.3);
+    cursor: default;
+  }
+
+  /* REFLECTION */
+  .reflection-section { padding: 24px 32px; }
+
+  .reflection-section h3 {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .reflection-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .reflection-field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .reflection-field textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    resize: vertical;
+    min-height: 80px;
+    color: var(--ink);
+    transition: border-color 0.2s;
+    background: var(--paper);
+  }
+
+  .reflection-field textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(212,84,26,0.08);
+  }
+
+  .confidence-row {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .confidence-row label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .confidence-btns {
+    display: flex;
+    gap: 6px;
+  }
+
+  .conf-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: white;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--muted);
+  }
+
+  .conf-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .conf-btn.selected { background: var(--accent); border-color: var(--accent); color: white; }
+
+  /* SAVE BUTTON */
+  .save-row {
+    padding: 20px 32px;
+    background: var(--warm);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .save-hint { font-size: 13px; color: var(--muted); }
+
+  .save-btn {
+    padding: 12px 32px;
+    border-radius: 8px;
+    border: none;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .save-btn:hover { background: #2d2c2b; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+  .save-btn:active { transform: translateY(1px); }
+
+  /* RESPONSIVE */
+  @media (max-width: 800px) {
+    .layout { grid-template-columns: 1fr; padding: 24px; }
+    .sidebar { position: static; }
+    .reflection-grid { grid-template-columns: 1fr; }
+    .page-header { padding: 32px 24px; }
+    .page-header h1 { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="breadcrumb">
+      Grow Online Digital <span>›</span> Student Portal <span>›</span> Progress Tracker
+    </div>
+    <h1>Track your <em>progress</em></h1>
+    <p>Mark tasks complete, log your certifications, and reflect each week. This is your record of growth.</p>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <!-- Overall Ring -->
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">Overall Progress</div>
+      <div class="overall-ring">
+        <div class="ring-wrap">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#e2ddd5" stroke-width="8"/>
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#d4541a" stroke-width="8"
+              stroke-dasharray="314.16"
+              stroke-dashoffset="314.16"
+              stroke-linecap="round"
+              id="ringProgress"
+              style="transition: stroke-dashoffset 1.2s cubic-bezier(0.16,1,0.3,1)"/>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-pct" id="ringPct">0%</div>
+            <div class="ring-label">complete</div>
+          </div>
+        </div>
+        <div class="ring-details">
+          <div class="detail-row">
+            <span class="key">Tasks done</span>
+            <span class="val" id="tasksDone">0 / 28</span>
+          </div>
+          <div class="detail-row">
+            <span class="key">Certs earned</span>
+            <span class="val" id="certsDone">0 / 8</span>
+          </div>
+          <div class="detail-row">
+            <span class="key">Week</span>
+            <span class="val">1 of 30</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Module Navigation -->
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">Jump to Module</div>
+      <div class="module-nav" id="moduleNav">
+        <!-- Built by JS -->
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-panel" id="mainPanel">
+    <!-- Built by JS -->
+  </main>
+
+</div>
+
+<script>
+const modules = [
+  {
+    id: 1,
+    title: "Foundations of Digital Marketing & AI",
+    weeks: "Weeks 1–2",
+    hours: "8–10 hrs",
+    cert: { name: "Fundamentals of Digital Marketing", provider: "Google Digital Garage", icon: "🎓" },
+    tasks: [
+      { text: "Write a 300–500 word digital marketing overview", tag: "Task 1.1" },
+      { text: "Observe and document a brand's digital marketing practices", tag: "Task 1.2" },
+      { text: "Complete 3 AI prompt exercises (ChatGPT / Claude / Gemini)", tag: "Task 1.3" },
+      { text: "Create a detailed buyer persona for your chosen business", tag: "Task 1.4" },
+    ]
+  },
+  {
+    id: 2,
+    title: "Website Fundamentals & UX",
+    weeks: "Weeks 3–4",
+    hours: "6–8 hrs",
+    cert: { name: "Practical Assessment", provider: "Grow Online Digital", icon: "🌐" },
+    tasks: [
+      { text: "Conduct a full UX audit on a real business website using PageSpeed Insights", tag: "Task 2.1" },
+      { text: "Create an annotated landing page wireframe", tag: "Task 2.2" },
+    ]
+  },
+  {
+    id: 3,
+    title: "SEO & AI Search",
+    weeks: "Weeks 5–8",
+    hours: "12–14 hrs",
+    cert: { name: "SEO Fundamentals Exam", provider: "Semrush Academy", icon: "🔍" },
+    tasks: [
+      { text: "Keyword research — 50+ keywords grouped by intent", tag: "Task 3.1" },
+      { text: "On-page SEO audit for 3 website pages", tag: "Task 3.2" },
+      { text: "Write a GEO strategy brief for AI search visibility", tag: "Task 3.3" },
+    ]
+  },
+  {
+    id: 4,
+    title: "Paid Search & PPC Advertising",
+    weeks: "Weeks 9–11",
+    hours: "12–14 hrs",
+    cert: { name: "Google Ads Search Certification", provider: "Google Skillshop", icon: "📢" },
+    tasks: [
+      { text: "Build a full Google Ads Search campaign plan", tag: "Task 4.1" },
+      { text: "Write 3 responsive search ads (15 headlines + 4 descriptions each)", tag: "Task 4.2" },
+      { text: "Explain AI Max vs Performance Max campaigns (200–300 words)", tag: "Task 4.3" },
+    ]
+  },
+  {
+    id: 5,
+    title: "Paid Social Advertising",
+    weeks: "Weeks 12–14",
+    hours: "10–12 hrs",
+    cert: { name: "Meta Digital Marketing Associate", provider: "Meta Blueprint", icon: "📱" },
+    tasks: [
+      { text: "Create a Meta Ads campaign plan with audience targeting strategy", tag: "Task 5.1" },
+      { text: "Design 3 ad creatives in Canva with copy", tag: "Task 5.2" },
+      { text: "Write a full retargeting strategy with audience segmentation", tag: "Task 5.3" },
+    ]
+  },
+  {
+    id: 6,
+    title: "Organic Social & Short-Form Video",
+    weeks: "Weeks 15–16",
+    hours: "8–10 hrs",
+    cert: { name: "HubSpot Social Media Marketing", provider: "HubSpot Academy", icon: "🎬" },
+    tasks: [
+      { text: "Social media strategy with 4-week content calendar (2 platforms)", tag: "Task 6.1" },
+      { text: "Write 3 short-form video scripts with hooks and CTAs", tag: "Task 6.2" },
+    ]
+  },
+  {
+    id: 7,
+    title: "Email Marketing & Automation",
+    weeks: "Weeks 17–18",
+    hours: "8–10 hrs",
+    cert: { name: "Email Marketing Certification", provider: "HubSpot Academy", icon: "✉️" },
+    tasks: [
+      { text: "Write a full email marketing plan for your chosen business", tag: "Task 7.1" },
+      { text: "Write a 5-email welcome sequence with subject lines and body copy", tag: "Task 7.2" },
+      { text: "Design 2 email automation workflow diagrams", tag: "Task 7.3" },
+    ]
+  },
+  {
+    id: 8,
+    title: "Content Marketing & AI Content Creation",
+    weeks: "Weeks 19–20",
+    hours: "8–10 hrs",
+    cert: { name: "Content Marketing Certification", provider: "HubSpot Academy", icon: "📝" },
+    tasks: [
+      { text: "Create a content strategy with 8-week editorial calendar", tag: "Task 8.1" },
+      { text: "Write 2 blog posts (1 AI-assisted, 1 fully original, 800–1200 words each)", tag: "Task 8.2" },
+      { text: "Content repurposing plan: one blog into 5+ formats", tag: "Task 8.3" },
+    ]
+  },
+  {
+    id: 9,
+    title: "Analytics, Data & Privacy",
+    weeks: "Weeks 21–23",
+    hours: "12–14 hrs",
+    cert: { name: "Google Analytics Certification", provider: "Google Skillshop", icon: "📊" },
+    tasks: [
+      { text: "Create a GA4 report interpreting acquisition, engagement, and conversions", tag: "Task 9.1" },
+      { text: "Build a Looker Studio dashboard with 5+ visualisations", tag: "Task 9.2" },
+      { text: "Create a GDPR/privacy compliance checklist", tag: "Task 9.3" },
+    ]
+  },
+  {
+    id: 10,
+    title: "Strategy & Career Readiness",
+    weeks: "Weeks 24–25",
+    hours: "8–10 hrs",
+    cert: { name: "Inbound Marketing Certification", provider: "HubSpot Academy", icon: "🎯" },
+    tasks: [
+      { text: "Build an integrated digital marketing strategy covering all channels", tag: "Task 10.1" },
+      { text: "Update CV and optimise LinkedIn with all certifications", tag: "Task 10.2" },
+    ]
+  },
+  {
+    id: 11,
+    title: "Final Capstone Project",
+    weeks: "Weeks 26–30",
+    hours: "30–40 hrs",
+    cert: { name: "Course Completion Certificate", provider: "Grow Online Digital", icon: "🏆" },
+    tasks: [
+      { text: "Business brief and competitor analysis", tag: "Week 26" },
+      { text: "Complete digital marketing strategy document", tag: "Week 27" },
+      { text: "Campaign assets (ads, social posts, video scripts, emails)", tag: "Week 28" },
+      { text: "KPI framework and Looker Studio dashboard", tag: "Week 29" },
+      { text: "Professional pitch deck (15–20 slides)", tag: "Week 30" },
+    ]
+  },
+];
+
+// State
+const state = {
+  activeModule: 0,
+  tasks: {},
+  certs: {},
+  reflections: {},
+  confidence: {}
+};
+
+function totalTasks() {
+  return modules.reduce((s, m) => s + m.tasks.length, 0);
+}
+
+function countDoneTasks() {
+  return Object.values(state.tasks).filter(Boolean).length;
+}
+
+function countEarnedCerts() {
+  return Object.values(state.certs).filter(Boolean).length;
+}
+
+function updateOverall() {
+  const total = totalTasks();
+  const done = countDoneTasks();
+  const pct = Math.round((done / total) * 100);
+
+  document.getElementById('ringPct').textContent = pct + '%';
+  document.getElementById('tasksDone').textContent = done + ' / ' + total;
+  document.getElementById('certsDone').textContent = countEarnedCerts() + ' / 8';
+
+  const circumference = 314.16;
+  const offset = circumference - (pct / 100) * circumference;
+  document.getElementById('ringProgress').style.strokeDashoffset = offset;
+
+  // Update nav dots
+  document.querySelectorAll('.nav-item').forEach((el, i) => {
+    const m = modules[i];
+    const mTasks = m.tasks.map((_, ti) => state.tasks[`${i}-${ti}`]);
+    const allDone = mTasks.every(Boolean) && state.certs[i];
+    el.classList.toggle('done', allDone);
+    el.classList.toggle('active', i === state.activeModule);
+  });
+}
+
+function renderNav() {
+  const nav = document.getElementById('moduleNav');
+  nav.innerHTML = modules.map((m, i) => `
+    <div class="nav-item ${i === state.activeModule ? 'active' : ''}" onclick="switchModule(${i})">
+      <span class="nav-num">${String(i+1).padStart(2,'0')}</span>
+      <div class="nav-dot"></div>
+      <div class="nav-title">${m.title}</div>
+    </div>
+  `).join('');
+}
+
+function renderModule(idx) {
+  const m = modules[idx];
+  const doneTasks = m.tasks.filter((_, ti) => state.tasks[`${idx}-${ti}`]).length;
+  const pct = Math.round((doneTasks / m.tasks.length) * 100);
+  const certEarned = state.certs[idx];
+  const conf = state.confidence[idx] || 0;
+
+  const panel = document.getElementById('mainPanel');
+  panel.innerHTML = `
+    <div class="module-panel">
+      <!-- Header -->
+      <div class="module-panel-header">
+        <div class="m-label">Module ${String(idx+1).padStart(2,'0')}</div>
+        <div class="m-title">${m.title}</div>
+        <div class="m-meta">
+          <span>📅 ${m.weeks}</span>
+          <span>⏱ ${m.hours}</span>
+          <span>✅ ${doneTasks}/${m.tasks.length} tasks</span>
+        </div>
+      </div>
+
+      <!-- Tasks -->
+      <div class="tasks-section">
+        <div class="tasks-header">
+          <h3>Assignments</h3>
+          <span class="tasks-pct">${pct}%</span>
+        </div>
+        <div class="task-bar">
+          <div class="task-bar-fill" style="width:${pct}%"></div>
+        </div>
+        <div class="task-list">
+          ${m.tasks.map((t, ti) => `
+            <div class="task-item ${state.tasks[`${idx}-${ti}`] ? 'done' : ''}" 
+                 onclick="toggleTask(${idx}, ${ti})">
+              <div class="task-checkbox">✓</div>
+              <div class="task-text">${t.text}</div>
+              <div class="task-tag">${t.tag}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- Certification -->
+      <div class="cert-section">
+        <div class="tasks-header" style="margin-bottom:12px">
+          <h3>Certification</h3>
+        </div>
+        <div class="cert-row ${certEarned ? 'earned' : ''}" onclick="toggleCert(${idx})">
+          <div class="cert-icon">${m.cert.icon}</div>
+          <div class="cert-row-info">
+            <div class="cert-row-name">${m.cert.name}</div>
+            <div class="cert-row-sub">${m.cert.provider}</div>
+          </div>
+          <button class="cert-earn-btn ${certEarned ? 'earned-state' : 'to-earn'}">
+            ${certEarned ? '🏅 Earned!' : 'Mark Earned'}
+          </button>
+        </div>
+      </div>
+
+      <!-- Reflection -->
+      <div class="reflection-section">
+        <h3>Weekly Reflection</h3>
+        <div class="reflection-grid">
+          <div class="reflection-field">
+            <label>Key takeaway this week</label>
+            <textarea placeholder="What's the most important thing you learned?" 
+              onchange="saveReflection(${idx}, 'takeaway', this.value)">${state.reflections[`${idx}-takeaway`] || ''}</textarea>
+          </div>
+          <div class="reflection-field">
+            <label>Questions for your trainer</label>
+            <textarea placeholder="Any concepts you're unsure about?" 
+              onchange="saveReflection(${idx}, 'questions', this.value)">${state.reflections[`${idx}-questions`] || ''}</textarea>
+          </div>
+          <div class="confidence-row">
+            <label>Confidence level this module:</label>
+            <div class="confidence-btns">
+              ${[1,2,3,4,5,6,7,8,9,10].map(n => `
+                <button class="conf-btn ${conf === n ? 'selected' : ''}" 
+                        onclick="setConfidence(${idx}, ${n})">${n}</button>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Save -->
+      <div class="save-row">
+        <span class="save-hint">Your progress is saved automatically</span>
+        <button class="save-btn" onclick="showSaved()">Save Progress ✓</button>
+      </div>
+    </div>
+  `;
+}
+
+function toggleTask(modIdx, taskIdx) {
+  const key = `${modIdx}-${taskIdx}`;
+  state.tasks[key] = !state.tasks[key];
+  renderModule(modIdx);
+  updateOverall();
+}
+
+function toggleCert(modIdx) {
+  state.certs[modIdx] = !state.certs[modIdx];
+  renderModule(modIdx);
+  updateOverall();
+}
+
+function saveReflection(modIdx, field, value) {
+  state.reflections[`${modIdx}-${field}`] = value;
+}
+
+function setConfidence(modIdx, val) {
+  state.confidence[modIdx] = state.confidence[modIdx] === val ? 0 : val;
+  renderModule(modIdx);
+}
+
+function switchModule(idx) {
+  state.activeModule = idx;
+  renderNav();
+  renderModule(idx);
+  updateOverall();
+  document.querySelector('.main-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showSaved() {
+  const btn = document.querySelector('.save-btn');
+  const orig = btn.textContent;
+  btn.textContent = '✓ Saved!';
+  btn.style.background = '#2d6a4f';
+  setTimeout(() => {
+    btn.textContent = orig;
+    btn.style.background = '';
+  }, 1800);
+}
+
+// Init
+renderNav();
+renderModule(0);
+
+// Animate ring in
+setTimeout(() => updateOverall(), 300);
+</script>
+
+</body>
+</html>
